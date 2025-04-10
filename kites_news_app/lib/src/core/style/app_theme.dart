@@ -8,7 +8,10 @@ import 'app_text_style.dart';
 /// Light theme
 final ThemeData appTheme = ThemeData(
   dialogBackgroundColor: AppColors.lightGray,
-  cardColor: AppColors.primaryColor,
+  // cardColor: AppColors.cardLightBg,
+  cardTheme: CardThemeData(
+    color: AppColors.cardLightBg,
+  ),
   appBarTheme: AppBarTheme(
     // shadowColor: AppColors.lightGray,
     color: AppColors.white,
@@ -63,7 +66,10 @@ final ThemeData appTheme = ThemeData(
 /// Dark theme
 final ThemeData darkAppTheme = ThemeData(
   dialogBackgroundColor: AppColors.primaryColor,
-  cardColor: AppColors.orange.withValues(alpha: 0.5),
+  // cardColor: AppColors.cardDarkBg,
+  cardTheme: CardThemeData(
+    color: AppColors.cardDarkBg,
+  ),
   appBarTheme: AppBarTheme(
     shadowColor: AppColors.white,
     color: AppColors().darkGray,

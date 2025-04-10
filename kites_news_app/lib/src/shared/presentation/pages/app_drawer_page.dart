@@ -99,6 +99,28 @@ class _AppDrawerPageState extends State<AppDrawerPage> {
             ),
           ),
 
+          // Spanish language
+          Theme(
+            data: ThemeData(unselectedWidgetColor: Theme.of(context).iconTheme.color),
+            child: RadioListTile(
+              activeColor: selectedLanguage != LanguageEnum.sp
+                  ? Theme.of(context).iconTheme.color
+                  : Theme.of(context).cardColor,
+              contentPadding: EdgeInsets.zero,
+              title: Text(
+                S.of(context).spanish,
+                style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              value: LanguageEnum.values[2],
+              groupValue: selectedLanguage,
+              onChanged: (value) {
+                selectedLanguage = value!;
+                context.read<AppNotifier>().setLocale(context, selectedLanguage);
+              },
+            ),
+          ),
           // Theme
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
