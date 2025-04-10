@@ -57,12 +57,12 @@ class _BackgroundPageState extends State<BackgroundPage> {
           isCallFromDrawer = false;
         }
       },
-      drawer: widget.withDrawer
+      drawer: /*widget.withDrawer
           ? Drawer(
               backgroundColor: Theme.of(context).scaffoldBackgroundColor,
               child: AppDrawerPage(),
             )
-          : null,
+          : */null,
       body: SafeArea(
         bottom: widget.bottomSafeArea,
         top: widget.topSafeArea,

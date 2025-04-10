@@ -16,4 +16,8 @@ class AppColors {
   static const gray = Color(0xFF9A9A9A);
   static const red = Color(0xFFD32F2F);
   static const transparent = Colors.transparent;
+  static const cardLightBg = Color(0xffD0DDD0);
+  static const cardDarkBg = Color(0xff2F3E35);
+
+
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:kites_news_app/main.dart';
 import 'package:kites_news_app/src/core/helper/helper.dart';
 import 'package:kites_news_app/src/core/network/response.dart';
@@ -7,14 +8,12 @@ import 'package:kites_news_app/src/features/news/domain/models/list_of_category_
 import 'package:kites_news_app/src/features/news/presentation/notifiers/NewsNotifier.dart';
 import 'package:kites_news_app/src/features/news/presentation/notifiers/category_notifier.dart';
 import 'package:kites_news_app/src/features/news/presentation/widgets/news_card_widget.dart';
-import 'package:kites_news_app/src/features/news/presentation/widgets/news_helper.dart';
 import 'package:kites_news_app/src/shared/presentation/pages/background_page.dart';
 import 'package:kites_news_app/src/shared/presentation/widgets/app_loader.dart';
 import 'package:kites_news_app/src/shared/presentation/widgets/custom_app_bar_widget.dart';
 import 'package:kites_news_app/src/shared/presentation/widgets/reload_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
-
 
 class NewsPage extends StatefulWidget {
   const NewsPage({Key? key}) : super(key: key);
@@ -23,16 +22,11 @@ class NewsPage extends StatefulWidget {
   State<NewsPage> createState() => _NewsPageState();
 }
 
-class _NewsPageState extends State<NewsPage> with SingleTickerProviderStateMixin {
+class _NewsPageState extends State<NewsPage> with TickerProviderStateMixin {
   late NewsNotifier newsNotifier;
-
   GlobalKey<ScaffoldState> _key = GlobalKey();
-
   RefreshController _refreshController = RefreshController(initialRefresh: false);
-
   final Map<int, AnimationController> animationControllers = {};
-
-  final NewsHelper newsHelper = NewsHelper();
 
   @override
   void initState() {
@@ -45,10 +39,24 @@ class _NewsPageState extends State<NewsPage> with SingleTickerProviderStateMixin
 
   @override
   void dispose() {
-    animationControllers.values.forEach((controller) {
-      controller.dispose();
-    });
+    animationControllers.forEach((_, controller) => controller.dispose());
+    _refreshController.dispose();
     super.dispose();
+  }
+
+  void _resetAnimations(int itemCount) {
+    animationControllers.forEach((_, controller) => controller.dispose());
+    animationControllers.clear();
+    for (int i = 0; i < itemCount; i++) {
+      animationControllers[i] = AnimationController(
+        duration: Duration(milliseconds: 500 + (i * 50)),
+        vsync: this,
+      )..forward();
+    }
+  }
+
+  Future<void> _triggerHapticFeedback() async {
+    await HapticFeedback.lightImpact(); // Subtle haptic feedback on tap
   }
 
   @override
@@ -59,28 +67,16 @@ class _NewsPageState extends State<NewsPage> with SingleTickerProviderStateMixin
     return BackgroundPage(
       scaffoldKey: _key,
       withDrawer: true,
+      backgroundColor: Color(0xffF0F0D7),
       child: Column(
         children: [
-          // Custom App Bar
           CustomAppBarWidget(
+            backgroundColor: Color(0xff41644A).withValues(alpha: 0.8),
             title: Text(
               S.of(context).ny_times_most_popular,
-              style: Theme.of(context).textTheme.bodyLarge,
+              style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: Colors.white,fontWeight: FontWeight.w600),
             ),
-            leading: IconButton(
-              padding: EdgeInsets.zero,
-              constraints: BoxConstraints(),
-              onPressed: () {
-                FocusManager.instance.primaryFocus?.unfocus();
-                _key.currentState!.openDrawer();
-              },
-              icon: Center(
-                child: Icon(
-                  Icons.menu,
-                  size: 20,
-                ),
-              ),
-            ),
+            leading: Icon(Icons.menu, size: 20,color: Colors.white,),
             actions: [
               IconButton(
                 icon: Icon( context.watch<AppNotifier>().isDarkMode ? Icons.light_mode : Icons.dark_mode),
@@ -90,57 +86,91 @@ class _NewsPageState extends State<NewsPage> with SingleTickerProviderStateMixin
               ),
             ],
           ),
-
+          SizedBox(height: Helper.getVerticalSpace()),
           SizedBox(
-            height: Helper.getVerticalSpace(),
-          ),
+            height: 50,
+            child: Container(
+              padding: const EdgeInsets.symmetric(vertical: 0),
+              child: Consumer<NewsNotifier>(
+                builder: (context, state, child) {
+                  return Consumer<CategoryNotifier>(
+                    builder: (context, value, child) {
+                      final selectedCategory = categoryNotifier.getSelectedCategory;
+                      final categories = state.newsResponse.data?.categories;
+                      if (categories == null || categories.isEmpty) {
+                        return SizedBox.shrink();
+                      }
+                      return ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        padding: const EdgeInsets.symmetric(horizontal: 8),
+                        itemCount: categories.length,
+                        itemBuilder: (context, index) {
+                          final category = categories[index];
+                          final isSelected = selectedCategory?.file == category?.file;
 
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 4.0,vertical: 8),
+                            child: GestureDetector(
+                              onTap: () async {
+                                await _triggerHapticFeedback(); // Haptic feedback
+                                categoryNotifier.setSelectedCategory(category);
+                                callArticles();
+                              },
+                              child: AnimatedContainer(
+                                duration: Duration(milliseconds: 200),
+                                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                                decoration: BoxDecoration(
+                                  color: isSelected
+                                      ? Color(0xffAAB99A)
+                                      : Color(0xffD0DDD0),
+                                  borderRadius: BorderRadius.circular(20),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black.withValues(alpha: 0.1),
+                                      blurRadius: 2,
+                                      offset: Offset(0, 1),
+                                    ),
+                                  ],
+                                ),
+                                child: Text(
+                                  category?.name ?? '',
+                                  style: TextStyle(
+                                    color: isSelected
+                                        ? Color(0xff41644A)
+                                        : Color(0xff41644A),
+                                    fontSize: 14,
+                                    fontWeight:FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      );
+                    },
+                  );
+                },
+              ),
+            ),
+          ),
           Expanded(
             child: Consumer<NewsNotifier>(
               builder: (context, state, child) {
                 if (state.newsCategoryResponse.status == Status.loading) {
-                  Center(child: AppLoader());
+                  return Center(child: AppLoader());
                 }
+
                 return SmartRefresher(
                   enablePullDown: true,
                   enablePullUp: false,
-                  header: WaterDropHeader(
-                    waterDropColor: Theme.of(context).cardColor,
-                  ),
+                  header: WaterDropHeader(waterDropColor: Theme.of(context).cardColor),
                   controller: _refreshController,
                   onRefresh: _onRefresh,
-                  onLoading: null,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SizedBox(
-                        height: 40,
-                        child: Consumer<CategoryNotifier>(
-                          builder: (BuildContext context, value, Widget? child) {
-                            final selectedCategory = categoryNotifier.getSelectedCategory;
-                            return ListView.builder(
-                              scrollDirection: Axis.horizontal,
-                              padding: const EdgeInsets.symmetric(horizontal: 8),
-                              itemCount: state.newsResponse.data?.categories?.length ?? 0,
-                              itemBuilder: (context, index) {
-                                final category =
-                                    state.newsResponse.data?.categories?[index];
-                                final isSelected =
-                                    selectedCategory?.file == category?.file;
-
-                                return newsHelper.filterChip(
-                                    onTap: () {
-                                      categoryNotifier.setSelectedCategory(category);
-                                      callArticles();
-                                    },
-                                    categoryName: category?.name ?? '',
-                                    isSelected: isSelected);
-                              },
-                            );
-                          },
-                        ),
-                      ),
-                      if (state.newsCategoryResponse.data?.clusters?.isNotEmpty ?? false)
+                      if (state.newsCategoryResponse.data?.clusters?.isNotEmpty ??
+                          false)
                         Expanded(
                           child: ListView.builder(
                             itemCount: state.newsCategoryResponse.data?.clusters?.length,
@@ -148,50 +178,48 @@ class _NewsPageState extends State<NewsPage> with SingleTickerProviderStateMixin
                               if (!animationControllers.containsKey(index)) {
                                 animationControllers[index] = AnimationController(
                                   duration: Duration(milliseconds: 500 + (index * 50)),
-                                  vsync: Scaffold.of(context),
+                                  vsync: this,
                                 );
                               }
 
                               final Animation<Offset> listItemAnimation = Tween<Offset>(
-                                begin: Offset(0, 1),
+                                begin: Offset(1, 0),
                                 end: Offset.zero,
                               ).animate(CurvedAnimation(
                                 parent: animationControllers[index]!,
                                 curve: Curves.easeOut,
                               ));
 
-                              // Trigger animation only when the item is visible
                               WidgetsBinding.instance.addPostFrameCallback((_) {
-                                if (!animationControllers[index]!.isAnimating &&
-                                    animationControllers[index]!.status !=
-                                        AnimationStatus.completed) {
+                                if (animationControllers[index]!.status !=
+                                    AnimationStatus.completed) {
                                   animationControllers[index]!.forward();
                                 }
                               });
-                              return Visibility(
-                                visible: true,
-                                child: SlideTransition(
-                                  position: listItemAnimation,
-                                  child: NewsCardWidget(
-                                    categoryModel:
-                                        state.newsCategoryResponse.data!.clusters![index],
-                                  ),
+
+                              return SlideTransition(
+                                position: listItemAnimation,
+                                child: NewsCardWidget(
+                                  categoryModel:
+                                  state.newsCategoryResponse.data!.clusters![index],
                                 ),
                               );
                             },
                           ),
                         ),
-                      if ((state.newsCategoryResponse.data?.clusters ?? []).isEmpty)
+                      if ((state.newsCategoryResponse.data?.clusters ?? []).isEmpty &&
+                          state.newsCategoryResponse.status == Status.completed)
                         Expanded(
-                            child: Center(
-                                child:
-                                    ReloadWidget.empty(content: S.of(context).no_data))),
+                          child: Center(
+                            child: ReloadWidget.empty(content: S.of(context).no_data),
+                          ),
+                        ),
                     ],
                   ),
                 );
               },
             ),
-          )
+          ),
         ],
       ),
     );
@@ -199,36 +227,33 @@ class _NewsPageState extends State<NewsPage> with SingleTickerProviderStateMixin
 
   Future<void> _fetchCategories() async {
     ListOfCategoryResponse? categories = await newsNotifier.getListOfCategory();
-
     if (categories != null) {
       Category worldCategory = categories.categories!.firstWhere(
-        (category) => category.name == 'World',
+            (category) => category.name == 'World',
         orElse: () => Category(file: 'world.json', name: 'World'),
       );
-
       final categoryNotifier = Provider.of<CategoryNotifier>(context, listen: false);
       categoryNotifier.setSelectedCategory(worldCategory);
-
       callArticles();
     } else {
       print('Failed to fetch categories.');
     }
   }
 
-  Future<void> callArticles({
-    bool withLoading = true,
-  }) async {
+  Future<void> callArticles({bool withLoading = true}) async {
     final categoryNotifier = Provider.of<CategoryNotifier>(context, listen: false);
-    final selectedCategory =
-        categoryNotifier.getSelectedCategory;
-
+    final selectedCategory = categoryNotifier.getSelectedCategory;
     if (selectedCategory != null) {
       await newsNotifier.getCategoryResponse(selectedCategory: selectedCategory.file);
+      if (newsNotifier.newsCategoryResponse.data?.clusters != null) {
+        _resetAnimations(newsNotifier.newsCategoryResponse.data!.clusters!.length);
+      }
     }
   }
-  
+
   void _onRefresh() async {
     _refreshController.requestRefresh();
     callArticles(withLoading: false);
+    _refreshController.refreshCompleted();
   }
 }

@@ -1,0 +1,20 @@
+{
+  "arabic": "Árabe",
+  "english": "Inglés",
+  "spanish": "Español",
+  "kite_news_app_by_kagi": "Aplicación de noticias Kite por Kagi",
+  "ny_times_most_popular": "Lo más popular del NY Times",
+  "required_field": "Campo obligatorio",
+  "dark_skin": "Modo oscuro",
+  "light_skin": "Modo claro",
+  "language": "Idioma",
+  "pull_up_load": "Desliza hacia arriba para cargar",
+  "load_failed": "¡Error al cargar! ¡Haz clic para reintentar!",
+  "release_to_load": "Suelta para cargar más",
+  "no_data": "¡Sin datos!",
+  "period": "Período",
+  "search": "Buscar",
+  "server_error": "Error del servidor",
+  "article_details": "Detalles del artículo",
+  "see_more": "Ver más"
+}
