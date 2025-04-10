@@ -1,5 +1,5 @@
 enum AppRouteEnum {
-  articlesPage,
+  newsPage,
   articleDetailsPage,
   weViewPage,
   photoViewPage
@@ -8,8 +8,8 @@ enum AppRouteEnum {
 extension AppRouteExtension on AppRouteEnum {
   String get name {
     switch (this) {
-      case AppRouteEnum.articlesPage:
-        return "/articles_page";
+      case AppRouteEnum.newsPage:
+        return "/news_page";
 
       case AppRouteEnum.articleDetailsPage:
         return "/article_details_page";

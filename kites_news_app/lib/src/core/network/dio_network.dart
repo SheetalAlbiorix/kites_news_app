@@ -11,7 +11,7 @@ import 'logger_interceptor.dart';
 class DioNetwork with DioMixin implements Dio {
   DioNetwork() {
     this.httpClientAdapter = HttpClientAdapter();
-    this.options = baseOptions(apiUrl);
+    this.options = baseOptions(baseApiUrl);
     this.interceptors.add(loggerInterceptor());
     this.interceptors.add(appQueuedInterceptorsWrapper());
   }

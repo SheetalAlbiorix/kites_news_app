@@ -8,6 +8,7 @@ import 'package:kites_news_app/src/core/style/app_theme.dart';
 import 'package:kites_news_app/src/core/translations/l10n.dart';
 import 'package:kites_news_app/src/core/utils/injections.dart';
 import 'package:kites_news_app/src/features/intro/presentation/pages/intro_page.dart';
+import 'package:kites_news_app/src/features/news/presentation/notifiers/category_notifier.dart';
 import 'package:kites_news_app/src/shared/data/data_sources/app_shared_prefs.dart';
 import 'package:kites_news_app/src/shared/domain/entities/language_enum.dart';
 import 'package:provider/provider.dart';
@@ -72,7 +73,9 @@ class _AppState extends State<App> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => authProvider),
+        ChangeNotifierProvider(create: (_) => articlesProvider),
+        ChangeNotifierProvider(create: (_) => newsProvider),
+        ChangeNotifierProvider(create: (_) => CategoryNotifier()),
       ],
       child: ChangeNotifierProvider<AppNotifier>.value(
         builder: (context, child) => child!,

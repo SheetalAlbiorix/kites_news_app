@@ -1,11 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:kites_news_app/src/features/news/presentation/pages/news_page.dart';
 import 'package:kites_news_app/src/shared/presentation/pages/photo_view_page.dart';
 import 'package:kites_news_app/src/shared/presentation/pages/web_view_page.dart';
 
 import '../../features/articles/domain/models/article_model.dart';
 import '../../features/articles/presentation/pages/article_details_page.dart';
-import '../../features/articles/presentation/pages/articles_page.dart';
+
 
 class AppRouter {
   static String currentRoute = "/";
@@ -14,10 +15,10 @@ class AppRouter {
     currentRoute = settings.name ?? "/";
     switch (settings.name) {
       // Ny Times Articles page
-      case '/articles_page':
+      case '/news_page':
         return CupertinoPageRoute(
           settings: RouteSettings(name: settings.name),
-          builder: (_) => const ArticlesPage(),
+          builder: (_) => const NewsPage(),
         );
 
       // Ny Times Article Details page

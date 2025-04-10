@@ -21,7 +21,7 @@ class _IntroPageState extends State<IntroPage> {
       () {
         Navigator.pushNamedAndRemoveUntil(
           context,
-          AppRouteEnum.articlesPage.name,
+          AppRouteEnum.newsPage.name,
           (route) => false,
         );
       },
