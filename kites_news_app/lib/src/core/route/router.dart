@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:kites_news_app/src/features/news/domain/models/category_response.dart';
+import 'package:kites_news_app/src/features/news/presentation/pages/news_detail_page.dart';
 import 'package:kites_news_app/src/features/news/presentation/pages/news_page.dart';
 import 'package:kites_news_app/src/shared/presentation/pages/photo_view_page.dart';
 import 'package:kites_news_app/src/shared/presentation/pages/web_view_page.dart';
@@ -58,6 +60,13 @@ class AppRouter {
           },
         );
 
+      case '/news_detail_page':
+        assert(settings.arguments != null, "Cluster model is required");
+        return _buildPageRouteWithArguments(
+          NewsDetailPage(clusterModel: settings.arguments as Cluster),
+          settings,
+        );
+
       default:
         return CupertinoPageRoute(
           settings: RouteSettings(name: settings.name),
@@ -69,4 +78,44 @@ class AppRouter {
         );
     }
   }
+
+  // Function to build a default page route with transition
+  static PageRouteBuilder _buildPageRoute(Widget page, RouteSettings settings) {
+    return PageRouteBuilder(
+      settings: RouteSettings(name: settings.name),
+      pageBuilder: (context, animation, secondaryAnimation) => page,
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        // Slide transition
+        const begin = Offset(1.0, 0.0);  // Slide in from the right
+        const end = Offset.zero;
+        const curve = Curves.easeInOut;
+
+        var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+        var offsetAnimation = animation.drive(tween);
+
+        return SlideTransition(position: offsetAnimation, child: child);
+      },
+    );
+  }
+
+  // Function to build a page route with arguments
+  static PageRouteBuilder _buildPageRouteWithArguments(
+      Widget page, RouteSettings settings) {
+    return PageRouteBuilder(
+      settings: RouteSettings(name: settings.name),
+      pageBuilder: (context, animation, secondaryAnimation) => page,
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        // Slide transition
+        const begin = Offset(1.0, 0.0);
+        const end = Offset.zero;
+        const curve = Curves.easeIn;
+
+        var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+        var offsetAnimation = animation.drive(tween);
+
+        return SlideTransition(position: offsetAnimation, child: child);
+      },
+    );
+  }
 }
+

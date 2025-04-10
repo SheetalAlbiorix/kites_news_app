@@ -42,6 +42,11 @@ class CachedImageWidget extends StatelessWidget {
                     Helper.getImagePath("no_image.png"),
                     fit: BoxFit.contain,
                   ),
+                  progressIndicatorBuilder: (context, url, downloadProgress) => Center(
+                      child: CircularProgressIndicator(
+                    value: downloadProgress.progress,
+                    color: Colors.black,
+                  )),
                 )
               : Image.asset(
                   Helper.getImagePath("no_image.png"),

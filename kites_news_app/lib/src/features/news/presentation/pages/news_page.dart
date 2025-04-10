@@ -81,9 +81,16 @@ class _NewsPageState extends State<NewsPage> with SingleTickerProviderStateMixin
                 ),
               ),
             ),
+            actions: [
+              IconButton(
+                icon: Icon( context.watch<AppNotifier>().isDarkMode ? Icons.light_mode : Icons.dark_mode),
+                onPressed: () {
+                  themeProvider.toggleTheme();
+                },
+              ),
+            ],
           ),
 
-          // Space
           SizedBox(
             height: Helper.getVerticalSpace(),
           ),
