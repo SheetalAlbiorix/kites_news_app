@@ -1,12 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:kites_news_app/src/features/news/domain/models/category_response.dart';
+import 'package:kites_news_app/src/features/news/presentation/notifiers/article_pagination_notifier.dart';
 import 'package:kites_news_app/src/features/news/presentation/pages/article_detail_page.dart';
 import 'package:kites_news_app/src/features/news/presentation/pages/news_detail_page.dart';
 import 'package:kites_news_app/src/features/news/presentation/pages/news_page.dart';
 import 'package:kites_news_app/src/shared/presentation/pages/photo_view_page.dart';
 import 'package:kites_news_app/src/shared/presentation/pages/web_view_page.dart';
-
+import 'package:provider/provider.dart';
 import '../../features/articles/domain/models/article_model.dart';
 
 
@@ -54,10 +55,17 @@ class AppRouter {
           settings,
         );
       case '/article_detail_page':
-        assert(settings.arguments != null, "Cluster model is required");
-        return _buildPageRouteWithArguments(
-          ArticleDetailPage(articleList: settings.arguments as List<Article>),
-          settings,
+        assert(settings.arguments != null, "Article model is required");
+        return CupertinoPageRoute(
+          settings: RouteSettings(name: settings.name),
+          builder: (BuildContext context) {
+            final articles = settings.arguments as List<Article>;
+            return  ChangeNotifierProvider(
+                create: (_) =>
+                    ArticlePaginationProvider(allArticles: articles),
+                child: ArticleDetailPage(articleList: settings.arguments as List<Article>));
+
+          },
         );
 
       default:

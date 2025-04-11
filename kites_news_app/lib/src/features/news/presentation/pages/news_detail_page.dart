@@ -90,12 +90,13 @@ class _NewsDetailPageState extends State<NewsDetailPage> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            S.of(context).articles,
+                            '${S.of(context).articles} :',
                             style: Theme.of(context)
                                 .textTheme
                                 .bodyLarge!
                                 .copyWith(fontWeight: FontWeight.bold,color: Theme.of(context).colorScheme.onPrimary),
                           ),
+                          if ((widget.clusterModel.articles?.length ?? 0) > 10)
                           GestureDetector(
                             onTap: () {
                               Navigator.pushNamed(
@@ -138,13 +139,15 @@ class _NewsDetailPageState extends State<NewsDetailPage> {
         itemBuilder: (context, index) {
           final article = widget.clusterModel.articles![index];
 
+          final faviconUrl = getFaviconForDomain(article.domain ?? '', widget.clusterModel.domains ?? []);
+
           return AnimationConfiguration.staggeredList(
             position: index,
             duration: const Duration(milliseconds: 400),
             child: SlideAnimation(
               verticalOffset: 50.0,
               child: FadeInAnimation(
-                child: newsDetailHelper.articlesList(articleList: article,context: context),
+                child: newsDetailHelper.articlesList(articleList: article,context: context,sourceImage: faviconUrl),
               ),
             ),
           );
@@ -152,4 +155,14 @@ class _NewsDetailPageState extends State<NewsDetailPage> {
       ),
     );
   }
+
+  String? getFaviconForDomain(String domain, List<Domain> domains) {
+    final matched = domains.firstWhere(
+          (d) => d.name == domain,
+      orElse: () => Domain(name: '', favicon: ''),
+    );
+    return matched.name!.isNotEmpty ? matched.favicon : null;
+  }
+
+
 }

@@ -17,6 +17,7 @@
   "server_error": "Server Error",
   "article_details": "Article Details",
   "see_more": "See More",
-  "articles": "Articles :",
-  "more": "more"
+  "articles": "Articles ",
+  "more": "more",
+  "no_internet_connection": "No Internet Connection"
 }
