@@ -1,13 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:kites_news_app/src/features/news/domain/models/category_response.dart';
+import 'package:kites_news_app/src/features/news/presentation/pages/article_detail_page.dart';
 import 'package:kites_news_app/src/features/news/presentation/pages/news_detail_page.dart';
 import 'package:kites_news_app/src/features/news/presentation/pages/news_page.dart';
 import 'package:kites_news_app/src/shared/presentation/pages/photo_view_page.dart';
 import 'package:kites_news_app/src/shared/presentation/pages/web_view_page.dart';
 
 import '../../features/articles/domain/models/article_model.dart';
-import '../../features/articles/presentation/pages/article_details_page.dart';
 
 
 class AppRouter {
@@ -21,19 +21,6 @@ class AppRouter {
         return CupertinoPageRoute(
           settings: RouteSettings(name: settings.name),
           builder: (_) => const NewsPage(),
-        );
-
-      // Ny Times Article Details page
-      case '/article_details_page':
-        return CupertinoPageRoute(
-          settings: RouteSettings(name: settings.name),
-          builder: (_) {
-            assert(
-                settings.arguments != null, "nyTimesArticleModel is required");
-            return ArticleDetailsPage(
-              model: settings.arguments as ArticleModel,
-            );
-          },
         );
 
       // Web view page
@@ -64,6 +51,12 @@ class AppRouter {
         assert(settings.arguments != null, "Cluster model is required");
         return _buildPageRouteWithArguments(
           NewsDetailPage(clusterModel: settings.arguments as Cluster),
+          settings,
+        );
+      case '/article_detail_page':
+        assert(settings.arguments != null, "Cluster model is required");
+        return _buildPageRouteWithArguments(
+          ArticleDetailPage(articleList: settings.arguments as List<Article>),
           settings,
         );
 

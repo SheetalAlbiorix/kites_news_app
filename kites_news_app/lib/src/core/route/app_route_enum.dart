@@ -3,7 +3,9 @@ enum AppRouteEnum {
   articleDetailsPage,
   weViewPage,
   photoViewPage,
-  newsDetailPage
+  newsDetailPage,
+
+  articleDetailPage
 }
 
 extension AppRouteExtension on AppRouteEnum {
@@ -23,6 +25,8 @@ extension AppRouteExtension on AppRouteEnum {
 
       case AppRouteEnum.newsDetailPage:
         return "/news_detail_page";
+      case AppRouteEnum.articleDetailPage:
+        return "/article_detail_page";
 
       default:
         return "/articles_page";

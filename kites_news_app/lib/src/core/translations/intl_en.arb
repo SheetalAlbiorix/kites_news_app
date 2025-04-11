@@ -14,5 +14,7 @@
   "search": "Search",
   "server_error": "Server Error",
   "article_details": "Article Details",
-  "see_more": "See More"
+  "see_more": "See More",
+  "articles": "Articles :",
+  "more": "more"
 }

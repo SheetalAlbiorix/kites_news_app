@@ -1,8 +1,12 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
-import 'package:intl/intl.dart';
+import 'package:kites_news_app/src/core/route/app_route_enum.dart';
+import 'package:kites_news_app/src/core/style/app_colors.dart';
+import 'package:kites_news_app/src/core/translations/l10n.dart';
 import 'package:kites_news_app/src/features/news/domain/models/category_response.dart';
+import 'package:kites_news_app/src/features/news/presentation/widgets/news_detail_helper.dart';
 import 'package:kites_news_app/src/shared/presentation/pages/background_page.dart';
 import 'package:kites_news_app/src/shared/presentation/widgets/arrow_back_button_widget.dart';
 import 'package:kites_news_app/src/shared/presentation/widgets/cached_image_widget.dart';
@@ -19,6 +23,8 @@ class NewsDetailPage extends StatefulWidget {
 
 class _NewsDetailPageState extends State<NewsDetailPage> {
   String? imageUrl;
+
+  final NewsDetailHelper newsDetailHelper = NewsDetailHelper();
 
   @override
   Widget build(BuildContext context) {
@@ -76,63 +82,36 @@ class _NewsDetailPageState extends State<NewsDetailPage> {
                       SizedBox(
                         height: 10,
                       ),
-                      Text(
-                        'Articles :',
-                        style: Theme.of(context)
-                            .textTheme
-                            .headlineLarge!
-                            .copyWith(fontWeight: FontWeight.bold, fontSize: 18),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            S.of(context).articles,
+                            style: Theme.of(context)
+                                .textTheme
+                                .headlineLarge!
+                                .copyWith(fontWeight: FontWeight.bold, fontSize: 18),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.pushNamed(
+                                context,
+                                AppRouteEnum.articleDetailPage.name,
+                                arguments: widget.clusterModel.articles,
+                              );
+                            },
+                            child: Text(
+                              S.of(context).more,
+                              style: Theme.of(context).textTheme.headlineLarge!.copyWith(
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 16,
+                                  decorationStyle: TextDecorationStyle.dashed,
+                                  decorationColor: AppColors.black),
+                            ),
+                          ),
+                        ],
                       ),
-                      AnimationLimiter(
-                        child: ListView.builder(
-                          itemCount: widget.clusterModel.articles?.length ?? 0,
-                          physics: NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          itemBuilder: (context, index) {
-                            final article = widget.clusterModel.articles![index];
-                            final date = DateTime.tryParse(article.date.toString());
-                            final formattedDate = date != null
-                                ? DateFormat('yMMMd – HH:mm').format(date)
-                                : '';
-
-                            return AnimationConfiguration.staggeredList(
-                              position: index,
-                              duration: const Duration(milliseconds: 400),
-                              child: SlideAnimation(
-                                verticalOffset: 50.0,
-                                child: FadeInAnimation(
-                                  child: Card(
-                                    margin: const EdgeInsets.symmetric(vertical: 8),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(12),
-                                    ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(16),
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            article.title ?? '',
-                                            style: const TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                          const SizedBox(height: 8),
-                                          Text(
-                                            '${article.domain} • $formattedDate',
-                                            style: const TextStyle(
-                                                fontSize: 12, color: Colors.grey),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                      ),
+                      articleList(),
                       SizedBox(
                         height: 10,
                       ),
@@ -141,6 +120,30 @@ class _NewsDetailPageState extends State<NewsDetailPage> {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget articleList() {
+    return AnimationLimiter(
+      child: ListView.builder(
+        itemCount: min(10, widget.clusterModel.articles?.length ?? 0),
+        physics: NeverScrollableScrollPhysics(),
+        shrinkWrap: true,
+        itemBuilder: (context, index) {
+          final article = widget.clusterModel.articles![index];
+
+          return AnimationConfiguration.staggeredList(
+            position: index,
+            duration: const Duration(milliseconds: 400),
+            child: SlideAnimation(
+              verticalOffset: 50.0,
+              child: FadeInAnimation(
+                child: newsDetailHelper.articlesList(articleList: article),
+              ),
+            ),
+          );
+        },
       ),
     );
   }
