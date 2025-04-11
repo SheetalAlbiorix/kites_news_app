@@ -101,8 +101,7 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
             child: SlideAnimation(
               verticalOffset: 50.0,
               child: FadeInAnimation(
-                              child: newsDetailHelper.articlesList(articleList: article,context: context),
-                child: newsDetailHelper.articlesList(articleList: article,sourceImage: faviconUrl),
+                              child: newsDetailHelper.articlesList(articleList: article,context: context,sourceImage: faviconUrl),
               ),
             ),
           );
