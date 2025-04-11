@@ -14,18 +14,22 @@ final ThemeData appTheme = ThemeData(
   ),
   appBarTheme: AppBarTheme(
     // shadowColor: AppColors.lightGray,
-    color: AppColors.white,
+    color: AppColors.appbarLightBGColor,
     elevation: 2,
     toolbarTextStyle: const TextTheme(
       titleLarge: AppTextStyle.xxxLargeBlack,
     ).bodyLarge,
     titleTextStyle: const TextTheme(
-      titleLarge: AppTextStyle.xxxLargeBlack,
-    ).titleLarge,
+      titleLarge: AppTextStyle.xxxLargeBlack
+    ).titleLarge!.copyWith(color: AppColors.appbarLightTextColor),
     systemOverlayStyle: SystemUiOverlayStyle.light,
+      iconTheme: IconThemeData(
+          color: AppColors.appbarLightTextColor
+      )
   ),
   fontFamily: "Georgia",
-  scaffoldBackgroundColor: AppColors.white,
+  scaffoldBackgroundColor: AppColors.scaffoldLightBGColor,
+
   iconTheme: const IconThemeData(color: AppColors.black, size: 25),
   textTheme: const TextTheme(
     headlineLarge: AppTextStyle.xxxLargeBlack,
@@ -44,7 +48,15 @@ final ThemeData appTheme = ThemeData(
       ),
     ),
   ),
-  colorScheme: ColorScheme.light(brightness: Brightness.light),
+  colorScheme: ColorScheme.light(
+    brightness: Brightness.light,
+    primary: AppColors.primaryColor,
+    secondary: AppColors.secondaryLightColor,
+    surface: AppColors.appbarLightBGColor,
+    onPrimary: AppColors.headLineLightText,
+    onSecondary: AppColors.bodyLightText
+
+  ),
   inputDecorationTheme: InputDecorationTheme(
       fillColor: AppColors.transparent,
       contentPadding: EdgeInsets.symmetric(
@@ -72,18 +84,22 @@ final ThemeData darkAppTheme = ThemeData(
   ),
   appBarTheme: AppBarTheme(
     shadowColor: AppColors.white,
-    color: AppColors().darkGray,
+    color: AppColors.appbarDarkBGColor,
     elevation: 0,
     toolbarTextStyle: const TextTheme(
       titleLarge: AppTextStyle.xxxLargeWhite,
     ).bodyLarge,
     titleTextStyle: const TextTheme(
       titleLarge: AppTextStyle.xxxLargeWhite,
-    ).titleLarge,
+    ).titleLarge!.copyWith(color: AppColors.appbarDarkTextColor),
     systemOverlayStyle: SystemUiOverlayStyle.light,
+    iconTheme: IconThemeData(
+      color: AppColors.appbarDarkTextColor
+    )
   ),
   fontFamily: "Georgia",
-  scaffoldBackgroundColor: AppColors.primaryColor,
+  scaffoldBackgroundColor: AppColors.scaffoldDarkBGColor,
+
   iconTheme: const IconThemeData(color: AppColors.white, size: 25),
   textTheme: const TextTheme(
     headlineLarge: AppTextStyle.xxxLargeWhite,
@@ -104,7 +120,15 @@ final ThemeData darkAppTheme = ThemeData(
       ),
     ),
   ),
-  colorScheme: ColorScheme.dark(brightness: Brightness.dark),
+  colorScheme: ColorScheme.dark(
+    brightness: Brightness.dark,
+    primary: AppColors.primaryDarkColor,
+    secondary: AppColors.secondaryDarkColor,
+    surface: AppColors.appbarDarkBGColor,
+      onPrimary: AppColors.headLineDarkText,
+      onSecondary: AppColors.bodyDarkText
+
+  ),
   inputDecorationTheme: InputDecorationTheme(
     contentPadding: EdgeInsets.symmetric(
       horizontal: 10.w,

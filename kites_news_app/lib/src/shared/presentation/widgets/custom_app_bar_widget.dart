@@ -27,13 +27,14 @@ class CustomAppBarWidget extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 0.h),
       decoration: BoxDecoration(
           color: backgroundColor ?? Theme.of(context).scaffoldBackgroundColor,
-          boxShadow: [
+  /*        boxShadow: [
             BoxShadow(
-                color: AppColors().darkGray.withValues(alpha: 0.1),
+                // color: AppColors().darkGray.withValues(alpha: 0.1),
                 spreadRadius: 0,
-                blurRadius: 4,
+                blurRadius: 0,
                 offset: Offset(0, 4))
-          ]),
+          ],*/
+      ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,

@@ -39,7 +39,8 @@ class NewsCardWidget extends StatelessWidget {
                       style: Theme.of(context)
                           .textTheme
                           .bodyLarge!
-                          .copyWith(color: AppColors().textColor,fontSize: 16,fontWeight: FontWeight.bold),
+                        .copyWith(color: Theme.of(context)
+                        .colorScheme.onPrimary,fontSize: 16,fontWeight: FontWeight.bold),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       softWrap: true,
@@ -52,7 +53,7 @@ class NewsCardWidget extends StatelessWidget {
                       style: Theme.of(context)
                           .textTheme
                           .bodyLarge!
-                          .copyWith(color: AppColors().textColor,fontSize: 14,fontWeight: FontWeight.w500),
+                        .copyWith(color: Theme.of(context).colorScheme.onPrimary,fontSize: 14,fontWeight: FontWeight.w500),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       softWrap: true,
@@ -60,11 +61,7 @@ class NewsCardWidget extends StatelessWidget {
                     SizedBox(
                       height: 10,
                     ),
-                      Text("💡 ${categoryModel.didYouKnow}", style: Theme.of(context)
-                          .textTheme
-                          .bodyLarge!
-                          .copyWith(color: AppColors().textColor,fontSize: 12,fontWeight: FontWeight.w500,
-                      fontStyle: FontStyle.italic)),
+                    Text("💡 ${categoryModel.didYouKnow}", style:  TextStyle(fontStyle: FontStyle.italic,color:  Theme.of(context).colorScheme.onSecondary,fontWeight: FontWeight.w500)),
                     SizedBox(
                       height: 10,
                     ),

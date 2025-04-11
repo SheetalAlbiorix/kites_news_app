@@ -3,11 +3,13 @@ import 'package:flutter/services.dart';
 import 'package:kites_news_app/main.dart';
 import 'package:kites_news_app/src/core/helper/helper.dart';
 import 'package:kites_news_app/src/core/network/response.dart';
+import 'package:kites_news_app/src/core/style/app_colors.dart';
 import 'package:kites_news_app/src/core/translations/l10n.dart';
 import 'package:kites_news_app/src/features/news/domain/models/list_of_category_model.dart';
 import 'package:kites_news_app/src/features/news/presentation/notifiers/NewsNotifier.dart';
 import 'package:kites_news_app/src/features/news/presentation/notifiers/category_notifier.dart';
 import 'package:kites_news_app/src/features/news/presentation/widgets/news_card_widget.dart';
+import 'package:kites_news_app/src/features/news/presentation/widgets/news_helper.dart';
 import 'package:kites_news_app/src/shared/presentation/pages/background_page.dart';
 import 'package:kites_news_app/src/shared/presentation/widgets/app_loader.dart';
 import 'package:kites_news_app/src/shared/presentation/widgets/custom_app_bar_widget.dart';
@@ -27,6 +29,7 @@ class _NewsPageState extends State<NewsPage> with TickerProviderStateMixin {
   GlobalKey<ScaffoldState> _key = GlobalKey();
   RefreshController _refreshController = RefreshController(initialRefresh: false);
   final Map<int, AnimationController> animationControllers = {};
+  final NewsHelper newsHelper = NewsHelper();
 
   @override
   void initState() {
@@ -67,25 +70,24 @@ class _NewsPageState extends State<NewsPage> with TickerProviderStateMixin {
     return BackgroundPage(
       scaffoldKey: _key,
       withDrawer: true,
-      backgroundColor: Color(0xffF0F0D7),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      appBar: AppBar(
+        title: Text(
+          S.of(context).ny_times_most_popular,
+          style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: Theme.of(context).colorScheme.primary,fontWeight: FontWeight.w600),
+        ),
+        leading: Icon(Icons.menu, size: 20),
+        actions: [
+          IconButton(
+            icon: Icon( context.watch<AppNotifier>().isDarkMode ? Icons.light_mode : Icons.dark_mode),
+            onPressed: () {
+              themeProvider.toggleTheme();
+            },
+          ),
+        ],
+      ),
       child: Column(
         children: [
-          CustomAppBarWidget(
-            backgroundColor: Color(0xff41644A).withValues(alpha: 0.8),
-            title: Text(
-              S.of(context).ny_times_most_popular,
-              style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: Colors.white,fontWeight: FontWeight.w600),
-            ),
-            leading: Icon(Icons.menu, size: 20,color: Colors.white,),
-            actions: [
-              IconButton(
-                icon: Icon( context.watch<AppNotifier>().isDarkMode ? Icons.light_mode : Icons.dark_mode),
-                onPressed: () {
-                  themeProvider.toggleTheme();
-                },
-              ),
-            ],
-          ),
           SizedBox(height: Helper.getVerticalSpace()),
           SizedBox(
             height: 50,
@@ -106,45 +108,17 @@ class _NewsPageState extends State<NewsPage> with TickerProviderStateMixin {
                         itemCount: categories.length,
                         itemBuilder: (context, index) {
                           final category = categories[index];
-                          final isSelected = selectedCategory?.file == category?.file;
+                          final isSelected = selectedCategory?.file == category.file;
 
-                          return Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 4.0,vertical: 8),
-                            child: GestureDetector(
-                              onTap: () async {
-                                await _triggerHapticFeedback(); // Haptic feedback
-                                categoryNotifier.setSelectedCategory(category);
-                                callArticles();
-                              },
-                              child: AnimatedContainer(
-                                duration: Duration(milliseconds: 200),
-                                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                                decoration: BoxDecoration(
-                                  color: isSelected
-                                      ? Color(0xffAAB99A)
-                                      : Color(0xffD0DDD0),
-                                  borderRadius: BorderRadius.circular(20),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.black.withValues(alpha: 0.1),
-                                      blurRadius: 2,
-                                      offset: Offset(0, 1),
-                                    ),
-                                  ],
-                                ),
-                                child: Text(
-                                  category?.name ?? '',
-                                  style: TextStyle(
-                                    color: isSelected
-                                        ? Color(0xff41644A)
-                                        : Color(0xff41644A),
-                                    fontSize: 14,
-                                    fontWeight:FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          );
+                          return newsHelper.filterChip(
+                            onTap: () async {
+                              await _triggerHapticFeedback(); // Haptic feedback
+                              categoryNotifier.setSelectedCategory(category);
+                              callArticles();
+                            },
+                            isSelected: isSelected,
+                            categoryName: category.name ?? ""
+                          ) ;
                         },
                       );
                     },
