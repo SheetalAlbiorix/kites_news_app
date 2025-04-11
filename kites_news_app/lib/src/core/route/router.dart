@@ -59,11 +59,11 @@ class AppRouter {
         return CupertinoPageRoute(
           settings: RouteSettings(name: settings.name),
           builder: (BuildContext context) {
-            final articles = settings.arguments as List<Article>;
+            final articles = settings.arguments as Cluster;
             return  ChangeNotifierProvider(
                 create: (_) =>
                     ArticlePaginationProvider(allArticles: articles),
-                child: ArticleDetailPage(articleList: settings.arguments as List<Article>));
+                child: ArticleDetailPage(articleList: settings.arguments as Cluster));
 
           },
         );

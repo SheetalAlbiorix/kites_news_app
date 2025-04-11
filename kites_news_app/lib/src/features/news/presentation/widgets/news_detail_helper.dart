@@ -84,4 +84,14 @@ class NewsDetailHelper {
       throw Exception('Could not launch $_url');
     }
   }
+
+  String? getFaviconForDomain(String domain, List<Domain> domains) {
+    final matched = domains.firstWhere(
+          (d) => d.name == domain,
+      orElse: () => Domain(name: '', favicon: ''),
+    );
+    return matched.name!.isNotEmpty ? matched.favicon : null;
+  }
+
+
 }
