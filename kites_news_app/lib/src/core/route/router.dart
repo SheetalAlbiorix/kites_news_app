@@ -8,8 +8,6 @@ import 'package:kites_news_app/src/features/news/presentation/pages/news_page.da
 import 'package:kites_news_app/src/shared/presentation/pages/photo_view_page.dart';
 import 'package:kites_news_app/src/shared/presentation/pages/web_view_page.dart';
 import 'package:provider/provider.dart';
-import '../../features/articles/domain/models/article_model.dart';
-
 
 class AppRouter {
   static String currentRoute = "/";
@@ -38,8 +36,7 @@ class AppRouter {
         return CupertinoPageRoute(
           settings: RouteSettings(name: settings.name),
           builder: (_) {
-            Map<String, dynamic>? args =
-                settings.arguments as Map<String, dynamic>?;
+            Map<String, dynamic>? args = settings.arguments as Map<String, dynamic>?;
             assert(args != null, "You should pass 'path' and 'fromNet'");
             return PhotoViewPage(
               path: args!['path'],
@@ -60,11 +57,10 @@ class AppRouter {
           settings: RouteSettings(name: settings.name),
           builder: (BuildContext context) {
             final articles = settings.arguments as List<Article>;
-            return  ChangeNotifierProvider(
-                create: (_) =>
-                    ArticlePaginationProvider(allArticles: articles),
-                child: ArticleDetailPage(articleList: settings.arguments as List<Article>));
-
+            return ChangeNotifierProvider(
+                create: (_) => ArticlePaginationProvider(allArticles: articles),
+                child:
+                    ArticleDetailPage(articleList: settings.arguments as List<Article>));
           },
         );
 
@@ -87,7 +83,7 @@ class AppRouter {
       pageBuilder: (context, animation, secondaryAnimation) => page,
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
         // Slide transition
-        const begin = Offset(1.0, 0.0);  // Slide in from the right
+        const begin = Offset(1.0, 0.0); // Slide in from the right
         const end = Offset.zero;
         const curve = Curves.easeInOut;
 
@@ -119,4 +115,3 @@ class AppRouter {
     );
   }
 }
-

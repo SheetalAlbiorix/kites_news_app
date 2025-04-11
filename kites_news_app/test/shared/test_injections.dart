@@ -1,18 +1,19 @@
+import 'package:kites_news_app/main.dart';
 import 'package:kites_news_app/src/core/network/dio_network.dart';
+import 'package:kites_news_app/src/core/network/web_service.dart';
 import 'package:kites_news_app/src/features/news/news_injections.dart';
+import 'package:mockito/annotations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../../main.dart';
-import '../../shared/app_injections.dart';
-import '../network/web_service.dart';
-import 'log/app_logger.dart';
+import 'test_injections.mocks.dart';
 
 typedef DependencyOverride = T Function<T>();
 
-Future<void> initInjections({DependencyOverride? override}) async {
+@GenerateMocks([DioNetwork])
+Future<void> testInitInjections() async {
   await initSharedPrefsInjections();
-  await initAppInjections();
-  await initDioInjections(override: override);
+  // await initAppInjections();
+  await initDioInjections();
   await initNewsInjections();
   // await initArticlesInjections();
 }
@@ -25,8 +26,7 @@ initSharedPrefsInjections() async {
 }
 
 Future<void> initDioInjections({DependencyOverride? override}) async {
-  initRootLogger();
-  sl.registerSingleton<DioNetwork>(override?.call<DioNetwork>() ?? DioNetwork());
+  sl.registerSingleton<DioNetwork>(MockDioNetwork());
   sl.registerSingleton<ApiService>(ApiService(dio: sl<DioNetwork>()));
   // DioNetwork.initDio();
 }

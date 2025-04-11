@@ -1,10 +1,8 @@
 import 'package:flutter/foundation.dart';
 
-import '../../../../core/network/response.dart';
+import '../network/response.dart';
 
 abstract class baseNotify extends ChangeNotifier {
-
-
   bool isProcessingCompleted = false;
   bool isProcessingStarted = false;
   bool isTimeOut = false;
@@ -47,10 +45,10 @@ abstract class baseNotify extends ChangeNotifier {
   }
 }
 
-
 class BaseNotifier extends ChangeNotifier {
   apiResIsLoading(BaseApiResponse res) {
     res.status = Status.loading;
+
     notifyListeners();
   }
 
@@ -78,4 +76,3 @@ class BaseNotifier extends ChangeNotifier {
     notifyListeners();
   }
 }
-

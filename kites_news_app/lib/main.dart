@@ -1,9 +1,12 @@
 import 'dart:async';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get_it/get_it.dart';
 import 'package:kites_news_app/provider_list.dart';
 import 'package:kites_news_app/src/core/helper/helper.dart';
 import 'package:kites_news_app/src/core/route/router.dart';
@@ -15,11 +18,9 @@ import 'package:kites_news_app/src/features/news/presentation/notifiers/category
 import 'package:kites_news_app/src/shared/data/data_sources/app_shared_prefs.dart';
 import 'package:kites_news_app/src/shared/domain/entities/language_enum.dart';
 import 'package:provider/provider.dart';
-import 'package:device_preview/device_preview.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
-
 
 final navigatorKey = GlobalKey<NavigatorState>();
+GetIt sl = GetIt.instance;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -50,7 +51,7 @@ class App extends StatefulWidget {
 
 class _AppState extends State<App> with WidgetsBindingObserver {
   final GlobalKey<ScaffoldMessengerState> snackBarKey =
-  GlobalKey<ScaffoldMessengerState>();
+      GlobalKey<ScaffoldMessengerState>();
 
   @override
   void initState() {
@@ -76,7 +77,6 @@ class _AppState extends State<App> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => articlesProvider),
         ChangeNotifierProvider(create: (_) => newsProvider),
         ChangeNotifierProvider(create: (_) => CategoryNotifier()),
       ],
@@ -102,28 +102,23 @@ class _AppState extends State<App> with WidgetsBindingObserver {
                       top: false,
                       bottom: true,
                       maintainBottomViewPadding: true,
-                      child: Column(
-                        children: [
-                          Expanded(child: child!),
-                          AnimatedContainer(
-                            duration: Duration(milliseconds: 500),
-                            curve: Curves.easeInOut,
-                            height: value.isConnected ? 0 : 50, // Animate height
-                            color: Colors.red,
-                            child: value.isConnected
-                                ? SizedBox.shrink()
-                                : Center(
-                              child: Text(
-                                S.of(context).no_internet_connection,
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 16
-                              ),
-                            ),
-                          ),
-                      ),
-                      ]
-                    ),
+                      child: Column(children: [
+                        Expanded(child: child!),
+                        AnimatedContainer(
+                          duration: Duration(milliseconds: 500),
+                          curve: Curves.easeInOut,
+                          height: value.isConnected ? 0 : 50, // Animate height
+                          color: Colors.red,
+                          child: value.isConnected
+                              ? SizedBox.shrink()
+                              : Center(
+                                  child: Text(
+                                    S.of(context).no_internet_connection,
+                                    style: TextStyle(color: Colors.black, fontSize: 16),
+                                  ),
+                                ),
+                        ),
+                      ]),
                     );
                   },
                   localizationsDelegates: const [
@@ -133,10 +128,7 @@ class _AppState extends State<App> with WidgetsBindingObserver {
                     GlobalCupertinoLocalizations.delegate,
                   ],
                   navigatorKey: navigatorKey,
-                  supportedLocales: const [
-                    Locale("ar"),
-                    Locale("en"),
-                  ],
+                  supportedLocales: const [Locale("ar"), Locale("en")],
                   home: const IntroPage(),
                 );
               },
@@ -156,7 +148,7 @@ class AppNotifier extends ChangeNotifier {
 
   bool get isDarkMode => _isDarkMode;
 
-  bool isConnected =true; // Network status
+  bool isConnected = true; // Network status
   final Connectivity _connectivity = Connectivity();
   StreamSubscription<List<ConnectivityResult>>? connectivitySubscription;
 
@@ -175,11 +167,11 @@ class AppNotifier extends ChangeNotifier {
     updateConnectivityStatus(result);
 
     connectivitySubscription =
-        _connectivity.onConnectivityChanged.listen((
-            List<ConnectivityResult> result) {
-          updateConnectivityStatus(result);
-        });
+        _connectivity.onConnectivityChanged.listen((List<ConnectivityResult> result) {
+      updateConnectivityStatus(result);
+    });
   }
+
   void updateConnectivityStatus(List<ConnectivityResult> results) {
     bool newConnectionStatus = results.contains(ConnectivityResult.wifi) ||
         results.contains(ConnectivityResult.mobile);
@@ -188,7 +180,6 @@ class AppNotifier extends ChangeNotifier {
       notifyListeners();
     }
   }
-
 
   void toggleTheme() {
     _isDarkMode = !_isDarkMode;
