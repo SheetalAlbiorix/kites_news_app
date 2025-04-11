@@ -51,7 +51,6 @@ abstract class baseNotify extends ChangeNotifier {
 class BaseNotifier extends ChangeNotifier {
   apiResIsLoading(BaseApiResponse res) {
     res.status = Status.loading;
-
     notifyListeners();
   }
 
