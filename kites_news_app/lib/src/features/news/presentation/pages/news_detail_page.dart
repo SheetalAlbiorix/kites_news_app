@@ -104,7 +104,7 @@ class _NewsDetailPageState extends State<NewsDetailPage> {
                               Navigator.pushNamed(
                                 context,
                                 AppRouteEnum.articleDetailPage.name,
-                                arguments: widget.clusterModel.articles,
+                                arguments: widget.clusterModel,
                               );
                             },
                             child: Text(
@@ -141,7 +141,7 @@ class _NewsDetailPageState extends State<NewsDetailPage> {
         itemBuilder: (context, index) {
           final article = widget.clusterModel.articles![index];
 
-          final faviconUrl = getFaviconForDomain(article.domain ?? '', widget.clusterModel.domains ?? []);
+          final faviconUrl = newsDetailHelper.getFaviconForDomain(article.domain ?? '', widget.clusterModel.domains ?? []);
 
           return AnimationConfiguration.staggeredList(
             position: index,
@@ -156,14 +156,6 @@ class _NewsDetailPageState extends State<NewsDetailPage> {
         },
       ),
     );
-  }
-
-  String? getFaviconForDomain(String domain, List<Domain> domains) {
-    final matched = domains.firstWhere(
-          (d) => d.name == domain,
-      orElse: () => Domain(name: '', favicon: ''),
-    );
-    return matched.name!.isNotEmpty ? matched.favicon : null;
   }
 
 

@@ -14,7 +14,7 @@ import 'package:provider/provider.dart';
 
 class ArticleDetailPage extends StatefulWidget {
 
-  final List<Article> articleList;
+  final Cluster articleList;
 
   const ArticleDetailPage({super.key,required this.articleList});
 
@@ -94,6 +94,7 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
           }
 
           final article = provider.visibleArticles[index];
+          final faviconUrl = newsDetailHelper.getFaviconForDomain(article.domain ?? '', widget.articleList.domains ?? []);
           return AnimationConfiguration.staggeredList(
             position: index,
             duration: const Duration(milliseconds: 400),
@@ -101,6 +102,7 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
               verticalOffset: 50.0,
               child: FadeInAnimation(
                               child: newsDetailHelper.articlesList(articleList: article,context: context),
+                child: newsDetailHelper.articlesList(articleList: article,sourceImage: faviconUrl),
               ),
             ),
           );
