@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -94,7 +97,35 @@ class _AppState extends State<App> with WidgetsBindingObserver {
                   theme: value._isDarkMode ? darkAppTheme : appTheme,
                   debugShowCheckedModeBanner: false,
                   locale: value.locale,
-                  builder: DevicePreview.appBuilder,
+                  builder: (context, child) {
+                    return SafeArea(
+                      top: false,
+                      bottom: true,
+                      maintainBottomViewPadding: true,
+                      child: Column(
+                        children: [
+                          Expanded(child: child!),
+                          AnimatedContainer(
+                            duration: Duration(milliseconds: 500),
+                            curve: Curves.easeInOut,
+                            height: value.isConnected ? 0 : 50, // Animate height
+                            color: Colors.red,
+                            child: value.isConnected
+                                ? SizedBox.shrink()
+                                : Center(
+                              child: Text(
+                                S.of(context).no_internet_connection,
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 16
+                              ),
+                            ),
+                          ),
+                      ),
+                      ]
+                    ),
+                    );
+                  },
                   localizationsDelegates: const [
                     S.delegate,
                     GlobalMaterialLocalizations.delegate,
@@ -125,14 +156,39 @@ class AppNotifier extends ChangeNotifier {
 
   bool get isDarkMode => _isDarkMode;
 
+  bool isConnected =true; // Network status
+  final Connectivity _connectivity = Connectivity();
+  StreamSubscription<List<ConnectivityResult>>? connectivitySubscription;
+
   AppNotifier() {
     _initialise();
   }
 
   Future _initialise() async {
+    await initialize();
     darkTheme = Helper.isDarkTheme();
     notifyListeners();
   }
+
+  Future<void> initialize() async {
+    final result = await _connectivity.checkConnectivity();
+    updateConnectivityStatus(result);
+
+    connectivitySubscription =
+        _connectivity.onConnectivityChanged.listen((
+            List<ConnectivityResult> result) {
+          updateConnectivityStatus(result);
+        });
+  }
+  void updateConnectivityStatus(List<ConnectivityResult> results) {
+    bool newConnectionStatus = results.contains(ConnectivityResult.wifi) ||
+        results.contains(ConnectivityResult.mobile);
+    if (newConnectionStatus != isConnected) {
+      isConnected = newConnectionStatus;
+      notifyListeners();
+    }
+  }
+
 
   void toggleTheme() {
     _isDarkMode = !_isDarkMode;
