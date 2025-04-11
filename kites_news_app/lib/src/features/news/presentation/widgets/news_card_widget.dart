@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:kites_news_app/src/core/helper/helper.dart';
 import 'package:kites_news_app/src/core/route/app_route_enum.dart';
 import 'package:kites_news_app/src/core/style/app_colors.dart';
@@ -14,7 +15,8 @@ class NewsCardWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: (){
+      onTap: () async {
+        await HapticFeedback.lightImpact();
         Navigator.pushNamed(
                 context,
                 AppRouteEnum.newsDetailPage.name,

@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:kites_news_app/main.dart';
 import 'package:kites_news_app/src/core/helper/helper.dart';
 import 'package:kites_news_app/src/core/network/response.dart';
-import 'package:kites_news_app/src/core/style/app_colors.dart';
 import 'package:kites_news_app/src/core/translations/l10n.dart';
 import 'package:kites_news_app/src/features/news/domain/models/list_of_category_model.dart';
 import 'package:kites_news_app/src/features/news/presentation/notifiers/NewsNotifier.dart';
@@ -12,7 +11,6 @@ import 'package:kites_news_app/src/features/news/presentation/widgets/news_card_
 import 'package:kites_news_app/src/features/news/presentation/widgets/news_helper.dart';
 import 'package:kites_news_app/src/shared/presentation/pages/background_page.dart';
 import 'package:kites_news_app/src/shared/presentation/widgets/app_loader.dart';
-import 'package:kites_news_app/src/shared/presentation/widgets/custom_app_bar_widget.dart';
 import 'package:kites_news_app/src/shared/presentation/widgets/reload_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -59,7 +57,7 @@ class _NewsPageState extends State<NewsPage> with TickerProviderStateMixin {
   }
 
   Future<void> _triggerHapticFeedback() async {
-    await HapticFeedback.lightImpact(); // Subtle haptic feedback on tap
+    await HapticFeedback.lightImpact();
   }
 
   @override
@@ -73,7 +71,7 @@ class _NewsPageState extends State<NewsPage> with TickerProviderStateMixin {
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         title: Text(
-          S.of(context).ny_times_most_popular,
+          S.of(context).kite_news,
           style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: Theme.of(context).colorScheme.onPrimary,fontWeight: FontWeight.w600),
         ),
         leading: Icon(Icons.menu, size: 20),
@@ -112,7 +110,7 @@ class _NewsPageState extends State<NewsPage> with TickerProviderStateMixin {
 
                           return newsHelper.filterChip(
                             onTap: () async {
-                              await _triggerHapticFeedback(); // Haptic feedback
+                              await _triggerHapticFeedback();
                               categoryNotifier.setSelectedCategory(category);
                               callArticles();
                             },

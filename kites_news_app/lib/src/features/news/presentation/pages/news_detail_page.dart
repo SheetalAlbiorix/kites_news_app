@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:kites_news_app/src/core/route/app_route_enum.dart';
@@ -98,7 +99,8 @@ class _NewsDetailPageState extends State<NewsDetailPage> {
                           ),
                           if ((widget.clusterModel.articles?.length ?? 0) > 10)
                           GestureDetector(
-                            onTap: () {
+                            onTap: () async {
+                              await HapticFeedback.lightImpact();
                               Navigator.pushNamed(
                                 context,
                                 AppRouteEnum.articleDetailPage.name,

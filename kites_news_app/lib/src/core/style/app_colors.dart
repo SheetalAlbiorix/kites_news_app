@@ -8,6 +8,7 @@ class AppColors {
  Color get textColor => isDark ? Colors.white : Colors.black;
  Color get darkGray => isDark ? Colors.white : Color(0xFF808080);
  Color get chipBGColor => isDark ? Color(0xff727D73) : Color(0xFFD0DDD0);
+ Color get errorMsgBgColor => isDark ? appbarDarkTextColor : appbarLightBGColor;
  Color get chipSelectedBGColor => isDark ? Color(0xff8A9A7A) : Color(0xFFAAB99A);
  Color get chipTextColor => isDark ? Color(0xffD0DDD0) : Color(0xFF727D73);
  Color get chipSelectedTextColor => isDark ? Color(0xffF0F0D7) : Color(0xFF3C463C);

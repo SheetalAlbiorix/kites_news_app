@@ -5,16 +5,19 @@ import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get_it/get_it.dart';
 import 'package:kites_news_app/provider_list.dart';
 import 'package:kites_news_app/src/core/helper/helper.dart';
 import 'package:kites_news_app/src/core/route/router.dart';
+import 'package:kites_news_app/src/core/style/app_colors.dart';
 import 'package:kites_news_app/src/core/style/app_theme.dart';
 import 'package:kites_news_app/src/core/translations/l10n.dart';
 import 'package:kites_news_app/src/core/utils/injections.dart';
 import 'package:kites_news_app/src/features/intro/presentation/pages/intro_page.dart';
 import 'package:kites_news_app/src/features/news/presentation/notifiers/category_notifier.dart';
+import 'package:kites_news_app/src/features/splash/splash_screen.dart';
 import 'package:kites_news_app/src/shared/data/data_sources/app_shared_prefs.dart';
 import 'package:kites_news_app/src/shared/domain/entities/language_enum.dart';
 import 'package:provider/provider.dart';
@@ -23,7 +26,8 @@ final navigatorKey = GlobalKey<NavigatorState>();
 GetIt sl = GetIt.instance;
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   // Inject all dependencies
   await initInjections();
 
@@ -56,7 +60,6 @@ class _AppState extends State<App> with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
-
     WidgetsBinding.instance.addObserver(this);
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -91,7 +94,7 @@ class _AppState extends State<App> with WidgetsBindingObserver {
               splitScreenMode: true,
               builder: (context, child) {
                 return MaterialApp(
-                  title: 'Ny Times Articles App',
+                  title: 'Kite News',
                   scaffoldMessengerKey: snackBarKey,
                   onGenerateRoute: AppRouter.generateRoute,
                   theme: value._isDarkMode ? darkAppTheme : appTheme,
@@ -102,23 +105,30 @@ class _AppState extends State<App> with WidgetsBindingObserver {
                       top: false,
                       bottom: true,
                       maintainBottomViewPadding: true,
-                      child: Column(children: [
-                        Expanded(child: child!),
-                        AnimatedContainer(
-                          duration: Duration(milliseconds: 500),
-                          curve: Curves.easeInOut,
-                          height: value.isConnected ? 0 : 50, // Animate height
-                          color: Colors.red,
-                          child: value.isConnected
-                              ? SizedBox.shrink()
-                              : Center(
-                                  child: Text(
-                                    S.of(context).no_internet_connection,
-                                    style: TextStyle(color: Colors.black, fontSize: 16),
-                                  ),
+                      child: Scaffold(
+                        body: Column(
+                          children: [
+                            Expanded(child: child!),
+                            AnimatedContainer(
+                              duration: Duration(milliseconds: 500),
+                              curve: Curves.easeInOut,
+                              height: value.isConnected ? 0 : 50, // Animate height
+                              color: Theme.of(context).colorScheme.errorContainer,
+                              child: value.isConnected
+                                  ? SizedBox.shrink()
+                                  : Center(
+                                child: Text(
+                                  S.of(context).no_internet_connection,
+                                  style: TextStyle(
+                                    color: Theme.of(context).colorScheme.primary,
+                                    fontSize: 16
                                 ),
-                        ),
-                      ]),
+                            ),
+                          ),
+                      ),
+                        ]
+                                            ),
+                      ),
                     );
                   },
                   localizationsDelegates: const [
@@ -128,8 +138,11 @@ class _AppState extends State<App> with WidgetsBindingObserver {
                     GlobalCupertinoLocalizations.delegate,
                   ],
                   navigatorKey: navigatorKey,
-                  supportedLocales: const [Locale("ar"), Locale("en")],
-                  home: const IntroPage(),
+                  supportedLocales: const [
+                    Locale("ar"),
+                    Locale("en"),
+                  ],
+                  home: const SplashScreen(),
                 );
               },
             );

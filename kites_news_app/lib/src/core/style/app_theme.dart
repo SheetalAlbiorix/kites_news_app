@@ -54,7 +54,9 @@ final ThemeData appTheme = ThemeData(
     secondary: AppColors.secondaryLightColor,
     surface: AppColors.appbarLightBGColor,
     onPrimary: AppColors.headLineLightText,
-    onSecondary: AppColors.bodyLightText
+    onSecondary: AppColors.bodyLightText,
+      error: Colors.green,
+      errorContainer: AppColors.appbarLightBGColor
 
   ),
   inputDecorationTheme: InputDecorationTheme(
@@ -126,7 +128,9 @@ final ThemeData darkAppTheme = ThemeData(
     secondary: AppColors.secondaryDarkColor,
     surface: AppColors.appbarDarkBGColor,
       onPrimary: AppColors.headLineDarkText,
-      onSecondary: AppColors.bodyDarkText
+      onSecondary: AppColors.bodyDarkText,
+      error: Colors.red,
+      errorContainer: AppColors.appbarDarkBGColor
 
   ),
   inputDecorationTheme: InputDecorationTheme(

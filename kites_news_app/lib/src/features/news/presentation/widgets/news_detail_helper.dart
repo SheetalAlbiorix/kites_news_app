@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:kites_news_app/src/features/news/domain/models/category_response.dart';
 import 'package:kites_news_app/src/shared/presentation/widgets/cached_image_widget.dart';
@@ -14,61 +15,62 @@ class NewsDetailHelper {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
       ),
-      child: Padding(
-        padding: const EdgeInsets.all(12),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  child: Text(
-                    articleList?.title ?? '',
-                    style:  TextStyle(fontSize: 16, fontWeight: FontWeight.bold,color:Theme.of(context).colorScheme.onPrimary,),
+      child: GestureDetector(
+        onTap: () async {
+          await HapticFeedback.lightImpact();
+          _launchUrl(url: articleList?.link);
+        },
+        child: Padding(
+          padding: const EdgeInsets.all(12),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: Text(
+                      articleList?.title ?? '',
+                      style:  TextStyle(fontSize: 16, fontWeight: FontWeight.bold,color:Theme.of(context).colorScheme.onPrimary,),
+                    ),
                   ),
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-                CachedImageWidget(
-                  imageUrl: articleList?.image,
-                  height: 60,
-                  width: 80,
-                  radius: 12,
-                ),
-              ],
-            ),
-            const SizedBox(height: 5),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              spacing: 10,
-              children: [
-                CachedImageWidget(
-                  imageUrl: sourceImage,
-                  width: 15,
-                  height: 15,
-                ),
-                GestureDetector(
-                  onTap: () async {
-                    _launchUrl(url: articleList?.link);
-                  },
-                  child: Text(
+                  SizedBox(
+                    width: 10,
+                  ),
+                  CachedImageWidget(
+                    imageUrl: articleList?.image,
+                    height: 60,
+                    width: 80,
+                    radius: 12,
+                  ),
+                ],
+              ),
+              const SizedBox(height: 5),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                spacing: 10,
+                children: [
+                  CachedImageWidget(
+                    imageUrl: sourceImage,
+                    width: 15,
+                    height: 15,
+                  ),
+                  Text(
                     '${articleList?.domain}',
                           style:  TextStyle(fontSize: 14,color:Theme.of(context).colorScheme.onSecondary,),
                   ),
-                ),
-                const Spacer(), // Pushes the date to the end
-                Text(
-                  '$formattedDate',
-                        style:  TextStyle(fontSize: 12, color:Theme.of(context).colorScheme.onSecondary,),
-                )
-              ],
-            ),
-            const SizedBox(height: 5),
-          ],
+                  const Spacer(), // Pushes the date to the end
+                  Text(
+                    '$formattedDate',
+                          style:  TextStyle(fontSize: 12, color:Theme.of(context).colorScheme.onSecondary,),
+                  )
+                ],
+              ),
+              const SizedBox(height: 5),
+            ],
+          ),
         ),
       ),
     );
