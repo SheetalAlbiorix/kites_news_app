@@ -5,7 +5,7 @@ import 'package:kites_news_app/src/shared/presentation/widgets/cached_image_widg
 import 'package:url_launcher/url_launcher.dart';
 
 class NewsDetailHelper {
-  Widget articlesList({Article? articleList}) {
+  Widget articlesList({Article? articleList,required BuildContext context}) {
     final date = DateTime.tryParse(articleList?.date.toString() ?? '');
     final formattedDate = date != null ? DateFormat('yMMMd').format(date) : '';
 
@@ -26,7 +26,7 @@ class NewsDetailHelper {
                 children: [
                   Text(
                     articleList?.title ?? '',
-                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    style:  TextStyle(fontSize: 16, fontWeight: FontWeight.bold,color:Theme.of(context).colorScheme.onPrimary,),
                   ),
                   const SizedBox(height: 5),
                   Row(
@@ -39,12 +39,12 @@ class NewsDetailHelper {
                         },
                         child: Text(
                           '${articleList?.domain}',
-                          style: const TextStyle(fontSize: 12, color: Colors.grey),
+                          style:  TextStyle(fontSize: 14,color:Theme.of(context).colorScheme.onSecondary,),
                         ),
                       ),
                       Text(
                         '$formattedDate',
-                        style: const TextStyle(fontSize: 10, color: Colors.grey),
+                        style:  TextStyle(fontSize: 12, color:Theme.of(context).colorScheme.onSecondary,),
                       )
                     ],
                   ),

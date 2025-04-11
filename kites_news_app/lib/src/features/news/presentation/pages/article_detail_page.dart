@@ -26,17 +26,19 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
   Widget build(BuildContext context) {
     return BackgroundPage(
       withDrawer: true,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      appBar: AppBar(
+        title: Text(
+          "widget.articleList",
+          style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: Theme.of(context).colorScheme.onPrimary,fontWeight: FontWeight.w600),
+        ),
+        leading: ArrowBackButtonWidget(),
+        scrolledUnderElevation: 0,
+
+      ),
       child: Column(
         children: [
-          CustomAppBarWidget(
-            title: Text(
-              "widget.articleList",
-              style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            leading: ArrowBackButtonWidget(),
-          ),
+
           Expanded(
             child: SingleChildScrollView(
               child: Padding(
@@ -57,7 +59,7 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
                           child: SlideAnimation(
                             verticalOffset: 50.0,
                             child: FadeInAnimation(
-                              child: newsDetailHelper.articlesList(articleList: article),
+                              child: newsDetailHelper.articlesList(articleList: article,context: context),
                             ),
                           ),
                         );

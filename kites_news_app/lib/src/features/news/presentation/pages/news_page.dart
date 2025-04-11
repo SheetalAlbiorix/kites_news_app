@@ -74,7 +74,7 @@ class _NewsPageState extends State<NewsPage> with TickerProviderStateMixin {
       appBar: AppBar(
         title: Text(
           S.of(context).ny_times_most_popular,
-          style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: Theme.of(context).colorScheme.primary,fontWeight: FontWeight.w600),
+          style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: Theme.of(context).colorScheme.onPrimary,fontWeight: FontWeight.w600),
         ),
         leading: Icon(Icons.menu, size: 20),
         actions: [

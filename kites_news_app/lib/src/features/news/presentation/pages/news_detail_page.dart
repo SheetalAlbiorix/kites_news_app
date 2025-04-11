@@ -38,17 +38,19 @@ class _NewsDetailPageState extends State<NewsDetailPage> {
 
     return BackgroundPage(
       withDrawer: true,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      appBar: AppBar(
+        title: Text(
+          "${widget.clusterModel.category}",
+          style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: Theme.of(context).colorScheme.onPrimary,fontWeight: FontWeight.bold),
+        ),
+        scrolledUnderElevation: 0,
+        centerTitle: true,
+        leading: ArrowBackButtonWidget(),
+
+      ),
       child: Column(
         children: [
-          CustomAppBarWidget(
-            title: Text(
-              "${widget.clusterModel.category}",
-              style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
-            ),
-            leading: ArrowBackButtonWidget(),
-          ),
           Expanded(
             child: SingleChildScrollView(
               child: Padding(
@@ -64,14 +66,16 @@ class _NewsDetailPageState extends State<NewsDetailPage> {
                       ),
                       Text(
                         '${widget.clusterModel.title}',
-                        style: Theme.of(context).textTheme.headlineLarge!.copyWith(
+                        style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                            color: Theme.of(context).colorScheme.onPrimary,
                             fontStyle: FontStyle.italic,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18),
+                            fontWeight: FontWeight.bold,),
                       ),
                       Text(
                         '${widget.clusterModel.shortSummary}',
-                        style: Theme.of(context).textTheme.bodyLarge,
+                        style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                          color: Theme.of(context).colorScheme.onSecondary,
+                        ),
                       ),
                       CachedImageWidget(
                         imageUrl: imageUrl,
@@ -89,8 +93,8 @@ class _NewsDetailPageState extends State<NewsDetailPage> {
                             S.of(context).articles,
                             style: Theme.of(context)
                                 .textTheme
-                                .headlineLarge!
-                                .copyWith(fontWeight: FontWeight.bold, fontSize: 18),
+                                .bodyLarge!
+                                .copyWith(fontWeight: FontWeight.bold,color: Theme.of(context).colorScheme.onPrimary),
                           ),
                           GestureDetector(
                             onTap: () {
@@ -102,9 +106,10 @@ class _NewsDetailPageState extends State<NewsDetailPage> {
                             },
                             child: Text(
                               S.of(context).more,
-                              style: Theme.of(context).textTheme.headlineLarge!.copyWith(
+                              style: Theme.of(context).textTheme.bodySmall!.copyWith(
                                   fontWeight: FontWeight.w500,
                                   fontSize: 16,
+                                  color: Theme.of(context).colorScheme.onPrimary,
                                   decorationStyle: TextDecorationStyle.dashed,
                                   decorationColor: AppColors.black),
                             ),
@@ -139,7 +144,7 @@ class _NewsDetailPageState extends State<NewsDetailPage> {
             child: SlideAnimation(
               verticalOffset: 50.0,
               child: FadeInAnimation(
-                child: newsDetailHelper.articlesList(articleList: article),
+                child: newsDetailHelper.articlesList(articleList: article,context: context),
               ),
             ),
           );

@@ -30,7 +30,7 @@ final ThemeData appTheme = ThemeData(
   fontFamily: "Georgia",
   scaffoldBackgroundColor: AppColors.scaffoldLightBGColor,
 
-  iconTheme: const IconThemeData(color: AppColors.black, size: 25),
+  iconTheme: const IconThemeData(color: AppColors.appbarLightTextColor, size: 25),
   textTheme: const TextTheme(
     headlineLarge: AppTextStyle.xxxLargeBlack,
     headlineMedium: AppTextStyle.xLargeBlack,
@@ -100,7 +100,7 @@ final ThemeData darkAppTheme = ThemeData(
   fontFamily: "Georgia",
   scaffoldBackgroundColor: AppColors.scaffoldDarkBGColor,
 
-  iconTheme: const IconThemeData(color: AppColors.white, size: 25),
+  iconTheme: const IconThemeData(color: AppColors.appbarDarkTextColor, size: 25),
   textTheme: const TextTheme(
     headlineLarge: AppTextStyle.xxxLargeWhite,
     headlineMedium: AppTextStyle.xLargeWhite,

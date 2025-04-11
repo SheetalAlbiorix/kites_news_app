@@ -47,6 +47,8 @@ class _BackgroundPageState extends State<BackgroundPage> {
           ? Theme.of(context).scaffoldBackgroundColor
           : widget.backgroundColor,
       resizeToAvoidBottomInset: false,
+      extendBodyBehindAppBar: true,
+
       onDrawerChanged: (isOpened) {
         if (!isOpened) {
           if (!isCallFromDrawer) {
