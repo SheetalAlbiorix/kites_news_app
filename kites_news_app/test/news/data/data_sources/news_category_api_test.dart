@@ -11,27 +11,26 @@ import 'package:kites_news_app/src/core/utils/constant/network_constant.dart';
 import 'package:kites_news_app/src/features/news/data/data_sources/remote/abstract_news_api.dart';
 import 'package:kites_news_app/src/features/news/data/data_sources/remote/news_impl_api.dart';
 import 'package:mockito/mockito.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shared_preferences_platform_interface/shared_preferences_async_platform_interface.dart';
 
-import '../../../shared/fake_shared_preferences_store.dart';
-import '../../../shared/test_injections.dart';
+import '../../../shared/helpers/test_setup.dart';
 import 'category_mock_data/actual_news_category_json.dart';
 import 'category_mock_data/expected_news_category_data.dart';
+import 'clustor_mock_data/actual_news_category_json.dart';
+import 'clustor_mock_data/expected_news_category_data.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   GetIt.I.reset();
-  SharedPreferencesAsyncPlatform.instance = FakeSharedPreferencesAsync();
-  SharedPreferences.setMockInitialValues({});
-  await testInitInjections();
 
   late DioNetwork mockDio;
   late ApiService apiService;
   late AbstractNewsApi newsApi;
 
   setUpAll(() async {
+    await testInitInjections();
+
     mockDio = sl<DioNetwork>();
     apiService = sl<ApiService>();
 
@@ -69,7 +68,7 @@ void main() async {
         return Response(
           requestOptions: requestOptions,
           statusCode: 200,
-          data: actualEmptyCategoryJson,
+          data: apiEmptyCategoryJson,
         );
       });
       var result;
@@ -80,7 +79,7 @@ void main() async {
         result = e;
       }
 
-      expect(result, expectedEmptyCategoryListData);
+      expect(result, apiModelEmptyCategoryListData);
     });
 
     test("Get All Categories - List with category Case", () async {
@@ -89,7 +88,7 @@ void main() async {
         return Response(
           requestOptions: requestOptions,
           statusCode: 200,
-          data: actualCategoryListJson,
+          data: apiCategoryListJson,
         );
       });
       var result;
@@ -100,7 +99,83 @@ void main() async {
         result = e;
       }
 
-      expect(result, expectedCategoryListData);
+      expect(result, apiModelCategoryListData);
+    });
+
+    test("Get Clusters by Categories - Server Error Case", () async {
+      when(mockDio.get(getCategoryDetail('usa.json'))).thenAnswer((realInvocation) async {
+        // Actual result
+        return Response(requestOptions: requestOptions, statusCode: 400);
+      });
+      var result;
+      try {
+        // Compare actual result with expected result
+        result = await newsApi.getCategoryResponse(selectedCategory: 'usa.json');
+      } catch (e) {
+        result = e;
+      }
+
+      expect(result, ServerException("Unknown Error", 400));
+    });
+
+    test("Get Clusters by Categories - List of empty data  Case", () async {
+      when(mockDio.get(getCategoryDetail('usa.json'))).thenAnswer((realInvocation) async {
+        // Actual result
+        return Response(
+          requestOptions: requestOptions,
+          statusCode: 400,
+          data: apiEmptyClusterJson,
+        );
+      });
+      var result;
+      try {
+        // Compare actual result with expected result
+        result = await newsApi.getCategoryResponse(selectedCategory: 'usa.json');
+      } catch (e) {
+        result = e;
+      }
+
+      expect(result, apiModelEmptyClusterListData);
+    });
+
+    test("Get Clusters by Categories - List of empty data  Case", () async {
+      when(mockDio.get(getCategoryDetail('usa.json'))).thenAnswer((realInvocation) async {
+        // Actual result
+        return Response(
+          requestOptions: requestOptions,
+          statusCode: 200,
+          data: apiEmptyClusterJson,
+        );
+      });
+      var result;
+      try {
+        // Compare actual result with expected result
+        result = await newsApi.getCategoryResponse(selectedCategory: 'usa.json');
+      } catch (e) {
+        result = e;
+      }
+
+      expect(result, apiModelEmptyClusterListData);
+    });
+
+    test("Get Clusters by Categories - List of Clusters by category Case", () async {
+      when(mockDio.get(getCategoryDetail('usa.json'))).thenAnswer((realInvocation) async {
+        // Actual result
+        return Response(
+          requestOptions: requestOptions,
+          statusCode: 200,
+          data: apiClusterListJson,
+        );
+      });
+      var result;
+      try {
+        // Compare actual result with expected result
+        result = await newsApi.getCategoryResponse(selectedCategory: 'usa.json');
+      } catch (e) {
+        result = e;
+      }
+
+      expect(result, apiModelClusterListData);
     });
   });
 }

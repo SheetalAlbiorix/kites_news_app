@@ -1,9 +1,6 @@
-Map<String, dynamic> actualEmptyCategoryJson = {
-  "timestamp": 1744288217,
-  "categories": [],
-};
+Map<String, dynamic> apiEmptyCategoryJson = {"timestamp": 1744288217, "categories": []};
 
-Map<String, dynamic> actualCategoryListJson = {
+Map<String, dynamic> apiCategoryListJson = {
   "timestamp": 1744288217,
   "categories": [
     {"name": "World", "file": "world.json"},

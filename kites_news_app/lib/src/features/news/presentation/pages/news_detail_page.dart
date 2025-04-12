@@ -1,4 +1,5 @@
 import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -11,7 +12,6 @@ import 'package:kites_news_app/src/features/news/presentation/widgets/news_detai
 import 'package:kites_news_app/src/shared/presentation/pages/background_page.dart';
 import 'package:kites_news_app/src/shared/presentation/widgets/arrow_back_button_widget.dart';
 import 'package:kites_news_app/src/shared/presentation/widgets/cached_image_widget.dart';
-import 'package:kites_news_app/src/shared/presentation/widgets/custom_app_bar_widget.dart';
 
 class NewsDetailPage extends StatefulWidget {
   final Cluster clusterModel;
@@ -43,17 +43,19 @@ class _NewsDetailPageState extends State<NewsDetailPage> {
       appBar: AppBar(
         title: Text(
           "${widget.clusterModel.category}",
-          style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: Theme.of(context).colorScheme.onPrimary,fontWeight: FontWeight.bold),
+          style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+              color: Theme.of(context).colorScheme.onPrimary,
+              fontWeight: FontWeight.bold),
         ),
         scrolledUnderElevation: 0,
         centerTitle: true,
         leading: ArrowBackButtonWidget(),
-
       ),
       child: Column(
         children: [
           Expanded(
             child: SingleChildScrollView(
+              key: ValueKey("news_details_main_list"),
               child: Padding(
                   padding: EdgeInsets.symmetric(
                     horizontal: 16,
@@ -68,15 +70,16 @@ class _NewsDetailPageState extends State<NewsDetailPage> {
                       Text(
                         '${widget.clusterModel.title}',
                         style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                            color: Theme.of(context).colorScheme.onPrimary,
-                            fontStyle: FontStyle.italic,
-                            fontWeight: FontWeight.bold,),
+                              color: Theme.of(context).colorScheme.onPrimary,
+                              fontStyle: FontStyle.italic,
+                              fontWeight: FontWeight.bold,
+                            ),
                       ),
                       Text(
                         '${widget.clusterModel.shortSummary}',
                         style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                          color: Theme.of(context).colorScheme.onSecondary,
-                        ),
+                              color: Theme.of(context).colorScheme.onSecondary,
+                            ),
                       ),
                       CachedImageWidget(
                         imageUrl: imageUrl,
@@ -91,32 +94,32 @@ class _NewsDetailPageState extends State<NewsDetailPage> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            '${S.of(context).articles} :',
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyLarge!
-                                .copyWith(fontWeight: FontWeight.bold,color: Theme.of(context).colorScheme.onPrimary),
+                            '${S.of(context).articles}:',
+                            style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                                fontWeight: FontWeight.bold,
+                                color: Theme.of(context).colorScheme.onPrimary),
                           ),
                           if ((widget.clusterModel.articles?.length ?? 0) > 10)
-                          GestureDetector(
-                            onTap: () async {
-                              await HapticFeedback.lightImpact();
-                              Navigator.pushNamed(
-                                context,
-                                AppRouteEnum.articleDetailPage.name,
-                                arguments: widget.clusterModel,
-                              );
-                            },
-                            child: Text(
-                              S.of(context).more,
-                              style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 16,
-                                  color: Theme.of(context).colorScheme.onPrimary,
-                                  decorationStyle: TextDecorationStyle.dashed,
-                                  decorationColor: AppColors.black),
+                            GestureDetector(
+                              onTap: () async {
+                                await HapticFeedback.lightImpact();
+                                Navigator.pushNamed(
+                                  context,
+                                  AppRouteEnum.articleDetailPage.name,
+                                  arguments: widget.clusterModel,
+                                );
+                              },
+                              child: Text(
+                                S.of(context).more,
+                                key: ValueKey("more_articles"),
+                                style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 16,
+                                    color: Theme.of(context).colorScheme.onPrimary,
+                                    decorationStyle: TextDecorationStyle.dashed,
+                                    decorationColor: AppColors.black),
+                              ),
                             ),
-                          ),
                         ],
                       ),
                       articleList(),
@@ -141,7 +144,8 @@ class _NewsDetailPageState extends State<NewsDetailPage> {
         itemBuilder: (context, index) {
           final article = widget.clusterModel.articles![index];
 
-          final faviconUrl = newsDetailHelper.getFaviconForDomain(article.domain ?? '', widget.clusterModel.domains ?? []);
+          final faviconUrl = newsDetailHelper.getFaviconForDomain(
+              article.domain ?? '', widget.clusterModel.domains ?? []);
 
           return AnimationConfiguration.staggeredList(
             position: index,
@@ -149,7 +153,8 @@ class _NewsDetailPageState extends State<NewsDetailPage> {
             child: SlideAnimation(
               verticalOffset: 50.0,
               child: FadeInAnimation(
-                child: newsDetailHelper.articlesList(articleList: article,context: context,sourceImage: faviconUrl),
+                child: newsDetailHelper.articlesList(
+                    articleList: article, context: context, sourceImage: faviconUrl),
               ),
             ),
           );
@@ -157,6 +162,4 @@ class _NewsDetailPageState extends State<NewsDetailPage> {
       ),
     );
   }
-
-
 }

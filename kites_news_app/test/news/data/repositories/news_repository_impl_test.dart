@@ -5,8 +5,9 @@ import 'package:kites_news_app/src/features/news/domain/repositories/abstract_ne
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
-import 'mock_data/news_category_mock/actual_articles_data.dart';
-import 'mock_data/news_category_mock/expected_articles_data.dart';
+import '../data_sources/category_mock_data/expected_news_category_data.dart';
+import '../data_sources/clustor_mock_data/expected_news_category_data.dart';
+import 'mock_data/expected_news_data.dart';
 import 'news_repository_impl_test.mocks.dart';
 
 @GenerateMocks([NewsImplApi])
@@ -26,7 +27,7 @@ void main() {
   group("Test news_rep_impl", () {
     test("Get All Categories - Failed Case, Empty Or Null Api response", () async {
       when(mockApi.getListOfCategory()).thenAnswer((realInvocation) async {
-        return actualNewsCategoryFailedOrEmptyListData;
+        return apiModelEmptyCategoryListData;
       });
       var result;
 
@@ -40,7 +41,7 @@ void main() {
 
     test("Get All Categories - Success Case", () async {
       when(mockApi.getListOfCategory()).thenAnswer((realInvocation) async {
-        return actualNewsCategoryListData;
+        return apiModelCategoryListData;
       });
       var result;
       try {
@@ -49,6 +50,40 @@ void main() {
         result = e;
       }
       expect(result.value, expectedNewsCategoryListData.value);
+    });
+
+    test("Get All Clusters - Empty Case", () async {
+      when(mockApi.getCategoryResponse(selectedCategory: "usa.json")).thenAnswer((
+        realInvocation,
+      ) async {
+        return apiModelEmptyClusterListData;
+      });
+      var result;
+      try {
+        result = await newsRepositoryImpl.getCategoryResponse(
+          selectedCategory: "usa.json",
+        );
+      } catch (e) {
+        result = e;
+      }
+      expect(result.value, expectedRepoNewsClusterEmptyData.value);
+    });
+
+    test("Get All Clusters - Success Case", () async {
+      when(mockApi.getCategoryResponse(selectedCategory: "usa.json")).thenAnswer((
+        realInvocation,
+      ) async {
+        return apiModelClusterListData;
+      });
+      var result;
+      try {
+        result = await newsRepositoryImpl.getCategoryResponse(
+          selectedCategory: "usa.json",
+        );
+      } catch (e) {
+        result = e;
+      }
+      expect(result.value, expectedRepoNewsClusterData.value);
     });
   });
 }

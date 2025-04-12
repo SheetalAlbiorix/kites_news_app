@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
-import 'package:kites_news_app/src/core/helper/helper.dart';
-import 'package:kites_news_app/src/core/style/app_colors.dart';
 import 'package:kites_news_app/src/features/splash/splash_helper.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -12,9 +10,7 @@ class SplashScreen extends StatefulWidget {
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen>  with SingleTickerProviderStateMixin {
-
-
+class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderStateMixin {
   final SplashHelper splashHelper = SplashHelper();
 
   @override

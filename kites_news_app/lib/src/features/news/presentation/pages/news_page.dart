@@ -72,12 +72,18 @@ class _NewsPageState extends State<NewsPage> with TickerProviderStateMixin {
       appBar: AppBar(
         title: Text(
           S.of(context).kite_news,
-          style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: Theme.of(context).colorScheme.onPrimary,fontWeight: FontWeight.w600),
+          style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+              color: Theme.of(context).colorScheme.onPrimary,
+              fontWeight: FontWeight.w600),
         ),
         leading: Icon(Icons.menu, size: 20),
         actions: [
           IconButton(
-            icon: Icon( context.watch<AppNotifier>().isDarkMode ? Icons.light_mode : Icons.dark_mode),
+            icon: Icon(
+              context.watch<AppNotifier>().isDarkMode
+                  ? Icons.light_mode
+                  : Icons.dark_mode,
+            ),
             onPressed: () {
               themeProvider.toggleTheme();
             },
@@ -109,14 +115,14 @@ class _NewsPageState extends State<NewsPage> with TickerProviderStateMixin {
                           final isSelected = selectedCategory?.file == category.file;
 
                           return newsHelper.filterChip(
-                            onTap: () async {
-                              await _triggerHapticFeedback();
-                              categoryNotifier.setSelectedCategory(category);
-                              callArticles();
-                            },
-                            isSelected: isSelected,
-                            categoryName: category.name ?? ""
-                          ) ;
+                              onTap: () async {
+                                await _triggerHapticFeedback();
+                                categoryNotifier.setSelectedCategory(category);
+                                await callArticles();
+                              },
+                              isSelected: isSelected,
+                              index: index,
+                              categoryName: category.name ?? "");
                         },
                       );
                     },
@@ -141,10 +147,10 @@ class _NewsPageState extends State<NewsPage> with TickerProviderStateMixin {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      if (state.newsCategoryResponse.data?.clusters?.isNotEmpty ??
-                          false)
+                      if (state.newsCategoryResponse.data?.clusters?.isNotEmpty ?? false)
                         Expanded(
                           child: ListView.builder(
+                            key: ValueKey("clusterListKey"),
                             itemCount: state.newsCategoryResponse.data?.clusters?.length,
                             itemBuilder: (context, index) {
                               if (!animationControllers.containsKey(index)) {
@@ -172,8 +178,9 @@ class _NewsPageState extends State<NewsPage> with TickerProviderStateMixin {
                               return SlideTransition(
                                 position: listItemAnimation,
                                 child: NewsCardWidget(
+                                  key: ValueKey("clusterKey_${index}"),
                                   categoryModel:
-                                  state.newsCategoryResponse.data!.clusters![index],
+                                      state.newsCategoryResponse.data!.clusters![index],
                                 ),
                               );
                             },
@@ -201,15 +208,13 @@ class _NewsPageState extends State<NewsPage> with TickerProviderStateMixin {
     ListOfCategoryResponse? categories = await newsNotifier.getListOfCategory();
     if (categories != null) {
       Category worldCategory = categories.categories!.firstWhere(
-            (category) => category.name == 'World',
+        (category) => category.name == 'World',
         orElse: () => Category(file: 'world.json', name: 'World'),
       );
       final categoryNotifier = Provider.of<CategoryNotifier>(context, listen: false);
       categoryNotifier.setSelectedCategory(worldCategory);
       callArticles();
-    } else {
-      print('Failed to fetch categories.');
-    }
+    } else {}
   }
 
   Future<void> callArticles({bool withLoading = true}) async {

@@ -5,7 +5,6 @@ import 'package:provider/provider.dart';
 import '../../../../main.dart';
 import '../../../core/helper/helper.dart';
 import '../../../core/translations/l10n.dart';
-import '../../../core/utils/injections.dart';
 import '../../data/data_sources/app_shared_prefs.dart';
 import '../../domain/entities/language_enum.dart';
 
@@ -110,8 +109,8 @@ class _AppDrawerPageState extends State<AppDrawerPage> {
               title: Text(
                 S.of(context).spanish,
                 style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
+                      fontWeight: FontWeight.bold,
+                    ),
               ),
               value: LanguageEnum.values[2],
               groupValue: selectedLanguage,

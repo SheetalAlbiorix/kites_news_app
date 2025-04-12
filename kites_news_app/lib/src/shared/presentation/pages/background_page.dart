@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'app_drawer_page.dart';
-
 class BackgroundPage extends StatefulWidget {
   final Widget child;
   final Color? backgroundColor;
@@ -48,7 +46,6 @@ class _BackgroundPageState extends State<BackgroundPage> {
           : widget.backgroundColor,
       resizeToAvoidBottomInset: false,
       extendBodyBehindAppBar: true,
-
       onDrawerChanged: (isOpened) {
         if (!isOpened) {
           if (!isCallFromDrawer) {
@@ -64,7 +61,8 @@ class _BackgroundPageState extends State<BackgroundPage> {
               backgroundColor: Theme.of(context).scaffoldBackgroundColor,
               child: AppDrawerPage(),
             )
-          : */null,
+          : */
+          null,
       body: SafeArea(
         bottom: widget.bottomSafeArea,
         top: widget.topSafeArea,

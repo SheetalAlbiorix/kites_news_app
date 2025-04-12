@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:kites_news_app/src/core/style/app_colors.dart';
 import 'package:lottie/lottie.dart';
 

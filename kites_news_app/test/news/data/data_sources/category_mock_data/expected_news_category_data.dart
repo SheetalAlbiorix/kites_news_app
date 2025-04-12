@@ -2,10 +2,10 @@ import 'package:kites_news_app/src/features/news/domain/models/list_of_category_
 
 import 'actual_news_category_json.dart';
 
-ListOfCategoryResponse expectedEmptyCategoryListData = ListOfCategoryResponse.fromJson(
-  actualEmptyCategoryJson,
+ListOfCategoryResponse apiModelEmptyCategoryListData = ListOfCategoryResponse.fromJson(
+  apiEmptyCategoryJson,
 );
 
-ListOfCategoryResponse expectedCategoryListData = ListOfCategoryResponse.fromJson(
-  actualCategoryListJson,
+ListOfCategoryResponse apiModelCategoryListData = ListOfCategoryResponse.fromJson(
+  apiCategoryListJson,
 );

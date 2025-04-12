@@ -1,15 +1,16 @@
-class CategoryResponse {
+import 'package:autoequal/autoequal.dart';
+import 'package:equatable/equatable.dart';
+
+part 'category_response.g.dart';
+
+@autoequal
+class CategoryResponse extends Equatable {
   final String? category;
   final int? timestamp;
   final int? read;
   final List<Cluster>? clusters;
 
-  CategoryResponse({
-    this.category,
-    this.timestamp,
-    this.read,
-    this.clusters,
-  });
+  CategoryResponse({this.category, this.timestamp, this.read, this.clusters});
 
   factory CategoryResponse.fromJson(Map<String, dynamic> json) => CategoryResponse(
         category: json["category"],
@@ -27,9 +28,14 @@ class CategoryResponse {
         "clusters":
             clusters == null ? [] : List<dynamic>.from(clusters!.map((x) => x.toJson())),
       };
+
+  @override
+  // TODO: implement props
+  List<Object?> get props => _$props;
 }
 
-class Cluster {
+@autoequal
+class Cluster extends Equatable {
   final int? clusterNumber;
   final int? uniqueDomains;
   final int? numberOfTitles;
@@ -135,7 +141,8 @@ class Cluster {
         perspectives: json["perspectives"] == null
             ? []
             : List<Perspective>.from(
-                json["perspectives"]!.map((x) => Perspective.fromJson(x))),
+                json["perspectives"]!.map((x) => Perspective.fromJson(x)),
+              ),
         emoji: json["emoji"],
         geopoliticalContext: json["geopolitical_context"],
         historicalBackground: json["historical_background"],
@@ -167,9 +174,9 @@ class Cluster {
         leagueStandings: json["league_standings"],
         diyTips: json["diy_tips"],
         designPrinciples: json["design_principles"],
-    userExperienceImpact: json["user_experience_impact"] is List
-        ? List<dynamic>.from(json["user_experience_impact"]!)
-        : json["user_experience_impact"],
+        userExperienceImpact: json["user_experience_impact"] is List
+            ? List<dynamic>.from(json["user_experience_impact"]!)
+            : json["user_experience_impact"],
         gameplayMechanics: json["gameplay_mechanics"] == null
             ? []
             : List<dynamic>.from(json["gameplay_mechanics"]!.map((x) => x)),
@@ -246,9 +253,14 @@ class Cluster {
         "domains":
             domains == null ? [] : List<dynamic>.from(domains!.map((x) => x.toJson())),
       };
+
+  @override
+  // TODO: implement props
+  List<Object?> get props => _$props;
 }
 
-class Article {
+@autoequal
+class Article extends Equatable {
   final String? title;
   final String? link;
   final String? domain;
@@ -256,14 +268,7 @@ class Article {
   final String? image;
   final String? imageCaption;
 
-  Article({
-    this.title,
-    this.link,
-    this.domain,
-    this.date,
-    this.image,
-    this.imageCaption,
-  });
+  Article({this.title, this.link, this.domain, this.date, this.image, this.imageCaption});
 
   factory Article.fromJson(Map<String, dynamic> json) => Article(
         title: json["title"],
@@ -282,36 +287,35 @@ class Article {
         "image": image,
         "image_caption": imageCaption,
       };
+
+  @override
+  // TODO: implement props
+  List<Object?> get props => _$props;
 }
 
-class Domain {
+@autoequal
+class Domain extends Equatable {
   final String? name;
   final String? favicon;
 
-  Domain({
-    this.name,
-    this.favicon,
-  });
+  Domain({this.name, this.favicon});
 
-  factory Domain.fromJson(Map<String, dynamic> json) => Domain(
-        name: json["name"],
-        favicon: json["favicon"],
-      );
+  factory Domain.fromJson(Map<String, dynamic> json) =>
+      Domain(name: json["name"], favicon: json["favicon"]);
 
-  Map<String, dynamic> toJson() => {
-        "name": name,
-        "favicon": favicon,
-      };
+  Map<String, dynamic> toJson() => {"name": name, "favicon": favicon};
+
+  @override
+  // TODO: implement props
+  List<Object?> get props => _$props;
 }
 
-class Perspective {
+@autoequal
+class Perspective extends Equatable {
   final String? text;
   final List<Source>? sources;
 
-  Perspective({
-    this.text,
-    this.sources,
-  });
+  Perspective({this.text, this.sources});
 
   factory Perspective.fromJson(Map<String, dynamic> json) => Perspective(
         text: json["text"],
@@ -325,24 +329,25 @@ class Perspective {
         "sources":
             sources == null ? [] : List<dynamic>.from(sources!.map((x) => x.toJson())),
       };
+
+  @override
+  // TODO: implement props
+  List<Object?> get props => _$props;
 }
 
-class Source {
+@autoequal
+class Source extends Equatable {
   final String? name;
   final String? url;
 
-  Source({
-    this.name,
-    this.url,
-  });
+  Source({this.name, this.url});
 
-  factory Source.fromJson(Map<String, dynamic> json) => Source(
-        name: json["name"],
-        url: json["url"],
-      );
+  factory Source.fromJson(Map<String, dynamic> json) =>
+      Source(name: json["name"], url: json["url"]);
 
-  Map<String, dynamic> toJson() => {
-        "name": name,
-        "url": url,
-      };
+  Map<String, dynamic> toJson() => {"name": name, "url": url};
+
+  @override
+  // TODO: implement props
+  List<Object?> get props => _$props;
 }

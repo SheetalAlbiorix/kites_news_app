@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:kites_news_app/src/features/news/domain/models/category_response.dart';
-import 'package:kites_news_app/src/shared/presentation/widgets/cached_image_widget.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../../shared/presentation/widgets/cached_image_widget.dart';
+
 class NewsDetailHelper {
-  Widget articlesList({Article? articleList,required BuildContext context,String? sourceImage}) {
+  Widget articlesList(
+      {Article? articleList, required BuildContext context, String? sourceImage}) {
     final date = DateTime.tryParse(articleList?.date.toString() ?? '');
     final formattedDate = date != null ? DateFormat('yMMMd').format(date) : '';
 
@@ -32,7 +34,11 @@ class NewsDetailHelper {
                   Expanded(
                     child: Text(
                       articleList?.title ?? '',
-                      style:  TextStyle(fontSize: 16, fontWeight: FontWeight.bold,color:Theme.of(context).colorScheme.onPrimary,),
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).colorScheme.onPrimary,
+                      ),
                     ),
                   ),
                   SizedBox(
@@ -59,12 +65,18 @@ class NewsDetailHelper {
                   ),
                   Text(
                     '${articleList?.domain}',
-                          style:  TextStyle(fontSize: 14,color:Theme.of(context).colorScheme.onSecondary,),
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Theme.of(context).colorScheme.onSecondary,
+                    ),
                   ),
                   const Spacer(), // Pushes the date to the end
                   Text(
                     '$formattedDate',
-                          style:  TextStyle(fontSize: 12, color:Theme.of(context).colorScheme.onSecondary,),
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Theme.of(context).colorScheme.onSecondary,
+                    ),
                   )
                 ],
               ),
@@ -89,11 +101,9 @@ class NewsDetailHelper {
 
   String? getFaviconForDomain(String domain, List<Domain> domains) {
     final matched = domains.firstWhere(
-          (d) => d.name == domain,
+      (d) => d.name == domain,
       orElse: () => Domain(name: '', favicon: ''),
     );
     return matched.name!.isNotEmpty ? matched.favicon : null;
   }
-
-
 }

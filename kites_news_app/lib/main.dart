@@ -11,11 +11,9 @@ import 'package:get_it/get_it.dart';
 import 'package:kites_news_app/provider_list.dart';
 import 'package:kites_news_app/src/core/helper/helper.dart';
 import 'package:kites_news_app/src/core/route/router.dart';
-import 'package:kites_news_app/src/core/style/app_colors.dart';
 import 'package:kites_news_app/src/core/style/app_theme.dart';
 import 'package:kites_news_app/src/core/translations/l10n.dart';
 import 'package:kites_news_app/src/core/utils/injections.dart';
-import 'package:kites_news_app/src/features/intro/presentation/pages/intro_page.dart';
 import 'package:kites_news_app/src/features/news/presentation/notifiers/category_notifier.dart';
 import 'package:kites_news_app/src/features/splash/splash_screen.dart';
 import 'package:kites_news_app/src/shared/data/data_sources/app_shared_prefs.dart';
@@ -106,28 +104,25 @@ class _AppState extends State<App> with WidgetsBindingObserver {
                       bottom: true,
                       maintainBottomViewPadding: true,
                       child: Scaffold(
-                        body: Column(
-                          children: [
-                            Expanded(child: child!),
-                            AnimatedContainer(
-                              duration: Duration(milliseconds: 500),
-                              curve: Curves.easeInOut,
-                              height: value.isConnected ? 0 : 50, // Animate height
-                              color: Theme.of(context).colorScheme.errorContainer,
-                              child: value.isConnected
-                                  ? SizedBox.shrink()
-                                  : Center(
-                                child: Text(
-                                  S.of(context).no_internet_connection,
-                                  style: TextStyle(
-                                    color: Theme.of(context).colorScheme.primary,
-                                    fontSize: 16
-                                ),
-                            ),
+                        body: Column(children: [
+                          Expanded(child: child!),
+                          AnimatedContainer(
+                            duration: Duration(milliseconds: 500),
+                            curve: Curves.easeInOut,
+                            height: value.isConnected ? 0 : 50, // Animate height
+                            color: Theme.of(context).colorScheme.errorContainer,
+                            child: value.isConnected
+                                ? SizedBox.shrink()
+                                : Center(
+                                    child: Text(
+                                      S.of(context).no_internet_connection,
+                                      style: TextStyle(
+                                          color: Theme.of(context).colorScheme.primary,
+                                          fontSize: 16),
+                                    ),
+                                  ),
                           ),
-                      ),
-                        ]
-                                            ),
+                        ]),
                       ),
                     );
                   },

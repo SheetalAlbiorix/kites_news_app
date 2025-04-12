@@ -27,9 +27,6 @@ extension AppRouteExtension on AppRouteEnum {
         return "/news_detail_page";
       case AppRouteEnum.articleDetailPage:
         return "/article_detail_page";
-
-      default:
-        return "/articles_page";
     }
   }
 }

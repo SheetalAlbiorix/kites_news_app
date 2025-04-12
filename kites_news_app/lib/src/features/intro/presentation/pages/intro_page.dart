@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:kites_news_app/src/core/helper/helper.dart';
@@ -14,18 +16,13 @@ class IntroPage extends StatefulWidget {
 class _IntroPageState extends State<IntroPage> {
   @override
   void initState() {
-    Future.delayed(
-      Duration(
-        seconds: 1,
-      ),
-      () {
-        Navigator.pushNamedAndRemoveUntil(
-          context,
-          AppRouteEnum.newsPage.name,
-          (route) => false,
-        );
-      },
-    );
+    Future.delayed(Duration(seconds: 1), () {
+      Navigator.pushNamedAndRemoveUntil(
+        context,
+        AppRouteEnum.newsPage.name,
+        (route) => false,
+      );
+    });
     super.initState();
   }
 
