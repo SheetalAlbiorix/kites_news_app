@@ -13,6 +13,7 @@ class NewsDetailHelper {
     final formattedDate = date != null ? DateFormat('yMMMd').format(date) : '';
 
     return Card(
+      key: ValueKey(articleList?.title ?? ''),
       margin: const EdgeInsets.symmetric(vertical: 8),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),

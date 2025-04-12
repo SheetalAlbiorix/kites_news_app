@@ -1,12 +1,10 @@
 import 'package:dartz/dartz.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:kites_news_app/src/core/network/error/exceptions.dart';
 import 'package:kites_news_app/src/core/network/error/failures.dart';
 import 'package:kites_news_app/src/features/news/data/data_sources/remote/news_impl_api.dart';
 import 'package:kites_news_app/src/features/news/domain/models/category_response.dart';
 import 'package:kites_news_app/src/features/news/domain/models/list_of_category_model.dart';
 import 'package:kites_news_app/src/features/news/domain/repositories/abstract_news_repository.dart';
-
 
 class NewsRepositoryImpl extends AbstractNewsRepository {
   final NewsImplApi newsApi;
@@ -18,7 +16,6 @@ class NewsRepositoryImpl extends AbstractNewsRepository {
   // Gent Ny Times Articles
   @override
   Future<Either<Failure, ListOfCategoryResponse>> getListOfCategory() async {
-    debugPrint("Called this time");
     try {
       final result = await newsApi.getListOfCategory();
       return Right(result);
@@ -29,10 +26,11 @@ class NewsRepositoryImpl extends AbstractNewsRepository {
     }
   }
 
-  Future<Either<Failure, CategoryResponse>> getCategoryResponse({String? selectedCategory}) async {
-    debugPrint("Called this time");
+  Future<Either<Failure, CategoryResponse>> getCategoryResponse(
+      {String? selectedCategory}) async {
     try {
-      final result = await newsApi.getCategoryResponse(selectedCategory: selectedCategory);
+      final result =
+          await newsApi.getCategoryResponse(selectedCategory: selectedCategory);
       return Right(result);
     } on ServerException catch (e) {
       return Left(ServerFailure(e.message, e.statusCode));

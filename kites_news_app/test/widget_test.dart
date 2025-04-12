@@ -7,6 +7,7 @@
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:kites_news_app/main.dart';
 import 'package:kites_news_app/src/core/helper/helper.dart';
@@ -21,6 +22,7 @@ import 'news/data/data_sources/category_mock_data/actual_news_category_json.dart
 import 'news/data/data_sources/clustor_mock_data/actual_news_category_json.dart';
 import 'shared/helpers/test_setup.dart';
 import 'shared/helpers/wrapper_widget.dart';
+import 'shared/mocks/fake_cache_manager.dart';
 
 void main() async {
   RequestOptions requestOptions = RequestOptions(headers: Helper.getHeaders());
@@ -189,6 +191,42 @@ void main() async {
           greaterThanOrEqualTo(10));
 
       expect(find.byKey(ValueKey("more_articles")), findsOneWidget);
+
+      mockFakeImages([
+        "https://kagiproxy.com/img/xuK6dj43425cNuAiMIauTVdnqKMOvsvxdCMY3dlO44PT4n3yY4_PjhqkknUAb1qFF0ZuULOnDpvJW5asjxU9PRFWJxL5NHmweXsaEAo",
+        "https://kagiproxy.com/img/W8REchoO6obCHLRkEZpK974zd76xUyc4vTq3JXn0giElVp6TCQU7a90XvfMslkEebWpRr7EFVEj9PP__eE1weYO3uTIhZ8fLxLA0ooD9jw",
+        "https://kagiproxy.com/img/SC-4Yxq4DNDQN6Cpua1tmauUupnjN6U0DQPef5trISuiN_bhmCmiv_mZD1n-uEyYm95CDABTdM16_uAArr2E31NctC1Mx4IN7DRcWcNL",
+        "https://kagiproxy.com/img/sYAzDmBGaklGUX7R1ysFL8Jjt8DTwflUOkq-Y3Jv5XD3vw9Ny6wngj0WzPG3b9JqJkbEa6cfjm6AjsCc3ozVYjRYl1Ux4cUAW2d8uIF4Xv-s3TGDdVkVncE0kkNtekGlyDtC4P6mHn5hOBK6F_sr7_bk3gb7gLH1sF7aClm1X9chAg",
+        "https://kagiproxy.com/img/6bnWuNlRSW7rn3CIGYoHDN6Giu5WBdJgOVUT2A6fU0BBfURw8f5n8fI45qZxoPZgXfpB32lxf-8lb06uYPANqliiH4sYcla-XaWNVi9Hdk2f0QuU1g",
+        "https://kagiproxy.com/img/-ehRz6dCaGA7bKe7b_vHnrN_LwhvQx_tJH5IqcJKSPsSg5g29kfSRvXLq1qbBmfD8-HMzvsWJGbz6Nvrsh5r3eupbVchF2mEz5gq17Yz-Cg6_aegqhM3ehLLdJZW8Df2TsAfzc18QoA-HMjlG_TL5gFUCcJMlyqtvl-_yZy6wDcf"
+      ]);
+
+      await tester.tap(find.byKey(ValueKey("more_articles")));
+      await tester.pumpAndSettle();
+
+      // for (Article article
+      //     in newsNotifier?.newsCategoryResponse.data?.clusters?[0].articles ?? []) {
+      //   final articleFinder = find.byKey(ValueKey(article.title ?? ''));
+      //
+      //   if (articleFinder.evaluate().isEmpty) {
+      //     // Try dragging the list to bring it into view
+      //     await tester.dragUntilVisible(
+      //         articleFinder, find.byKey(ValueKey("all_articles_list")), Offset(0, -20));
+      //     await tester.pumpAndSettle();
+      //   }
+      //
+      //   expect(articleFinder, findsOneWidget, reason: "${article.title} not found");
+      // }
+      expect(
+          find.text(
+              "Fox News Is Having an Incredible Reaction to Trump’s Sudden Tariff Reversal"),
+          findsOneWidget);
     });
   });
+}
+
+void mockFakeImages(List<String> imageNetworks) {
+  for (var i in imageNetworks) {
+    (sl<CacheManager>() as FakeCacheManager).returns(i, kTransparentImage);
+  }
 }

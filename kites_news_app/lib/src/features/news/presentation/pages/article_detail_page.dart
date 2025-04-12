@@ -75,6 +75,7 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
 
     return AnimationLimiter(
       child: ListView.builder(
+        key: ValueKey("all_articles_list"),
         controller: _scrollController,
         itemCount: provider.visibleArticles.length + (provider.isLoadingMore ? 1 : 0),
         itemBuilder: (context, index) {
