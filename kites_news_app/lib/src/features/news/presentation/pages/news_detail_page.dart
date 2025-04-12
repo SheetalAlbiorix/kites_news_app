@@ -94,6 +94,7 @@ class _NewsDetailPageState extends State<NewsDetailPage> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
+                            key: ValueKey("articles_label"),
                             '${S.of(context).articles}:',
                             style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                                 fontWeight: FontWeight.bold,

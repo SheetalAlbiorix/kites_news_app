@@ -67,6 +67,8 @@ void main() async {
     ///   cluster widget to be at the last position as defined by the API response,
     ///   with its title located at the second position among the cluster card's
     ///   three descendant texts.
+    /// - Ensure the "More" Articles widget only shows when there are more more t
+    ///   hen 10 articles presents
     testWidgets(
         """Verifies the text content of chips and cluster widgets within the NewsPage""",
         (WidgetTester tester) async {
@@ -134,6 +136,27 @@ void main() async {
           "DOJ to deport alleged MS-13 leader instead of prosecution");
       expect(newsNotifier.newsCategoryResponse.data?.clusters?[lastCluster].title,
           lastClusterTextWidget[1].data);
+
+      await tester.tap(find.byKey(ValueKey("clusterKey_${lastCluster}")));
+
+      await tester.pump(const Duration(milliseconds: 300)); // Navigation transition
+      await tester.pump(const Duration(seconds: 1)); // First pass for initial build
+      await tester.pump(const Duration(seconds: 1)); // Second pass for animations/images
+      await tester.pumpAndSettle(Duration(minutes: 1));
+
+      expect(find.text("DOJ to deport alleged MS-13 leader instead of prosecution"),
+          findsOneWidget);
+
+      await tester.dragUntilVisible(find.byKey(ValueKey("articles_label")),
+          find.byKey(ValueKey("news_details_main_list")), Offset(0, -500));
+      await tester.pumpAndSettle();
+
+      /// More Articles widget only shows when there are more more then 10 articles presents
+      expect(
+          newsNotifier.newsCategoryResponse.data?.clusters?[lastCluster].articles?.length,
+          lessThan(10));
+
+      expect(find.byKey(ValueKey("more_articles")), findsNothing);
     });
 
     /// Navigates to NewsDetailPage on cluster tap,
