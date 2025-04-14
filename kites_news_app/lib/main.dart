@@ -138,7 +138,7 @@ class _AppState extends State<App> with WidgetsBindingObserver {
                   ],
                   navigatorKey: navigatorKey,
                   supportedLocales: const [
-                    /*Locale("ar"),*/
+                    Locale("ar"),
                     Locale("en"),
                   ],
                   home: const SplashScreen(),
