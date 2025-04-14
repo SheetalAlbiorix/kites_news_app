@@ -191,9 +191,9 @@ class _NewsPageState extends State<NewsPage> with TickerProviderStateMixin {
                         ),
                       if ((state.newsCategoryResponse.data?.clusters ?? []).isEmpty &&
                           state.newsCategoryResponse.status == Status.completed)
-                        Center(
-                          child: ReloadWidget.empty(content: S.of(context).no_data),
-                        ),
+                        SizedBox(
+                            height:MediaQuery.of(context).size.height*0.70,
+                            child: Center(child: ReloadWidget.empty(content: S.of(context).no_data))),
                     ],
                   ),
                 );
