@@ -76,7 +76,14 @@ class _NewsPageState extends State<NewsPage> with TickerProviderStateMixin {
               color: Theme.of(context).colorScheme.onPrimary,
               fontWeight: FontWeight.w600),
         ),
-        leading: Icon(Icons.menu, size: 20),
+        leading: IconButton(
+            padding: EdgeInsets.zero,
+            constraints: BoxConstraints(),
+            onPressed: () {
+              FocusManager.instance.primaryFocus?.unfocus();
+              _key.currentState!.openDrawer();
+            },
+            icon: Icon(Icons.menu, size: 20)),
         actions: [
           IconButton(
             icon: Icon(
