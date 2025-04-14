@@ -4,6 +4,7 @@ import 'package:kites_news_app/main.dart';
 import 'package:kites_news_app/src/core/helper/helper.dart';
 import 'package:kites_news_app/src/core/network/response.dart';
 import 'package:kites_news_app/src/core/translations/l10n.dart';
+import 'package:kites_news_app/src/core/utils/constant/key_constants.dart';
 import 'package:kites_news_app/src/features/news/domain/models/list_of_category_model.dart';
 import 'package:kites_news_app/src/features/news/presentation/notifiers/NewsNotifier.dart';
 import 'package:kites_news_app/src/features/news/presentation/notifiers/category_notifier.dart';
@@ -147,16 +148,16 @@ class _NewsPageState extends State<NewsPage> with TickerProviderStateMixin {
                 return SmartRefresher(
                   enablePullDown: true,
                   enablePullUp: false,
-                  header: WaterDropHeader(
-                    waterDropColor: Theme.of(context).cardColor),
+                  header: WaterDropHeader(waterDropColor: Theme.of(context).cardColor),
                   controller: _refreshController,
                   onRefresh: _onRefresh,
                   child: ListView(
+                    key: clusterListKey,
                     children: [
                       if (state.newsCategoryResponse.data?.clusters?.isNotEmpty ?? false)
                         ...List.generate(
                           state.newsCategoryResponse.data!.clusters!.length,
-                              (index) {
+                          (index) {
                             if (!animationControllers.containsKey(index)) {
                               animationControllers[index] = AnimationController(
                                 duration: Duration(milliseconds: 500 + (index * 50)),
@@ -172,7 +173,8 @@ class _NewsPageState extends State<NewsPage> with TickerProviderStateMixin {
                             ));
 
                             WidgetsBinding.instance.addPostFrameCallback((_) {
-                              if (animationControllers[index]!.status != AnimationStatus.completed) {
+                              if (animationControllers[index]!.status !=
+                                  AnimationStatus.completed) {
                                 animationControllers[index]!.forward();
                               }
                             });
@@ -180,8 +182,9 @@ class _NewsPageState extends State<NewsPage> with TickerProviderStateMixin {
                             return SlideTransition(
                               position: listItemAnimation,
                               child: NewsCardWidget(
-                                key: ValueKey("clusterKey_${index}"),
-                                categoryModel: state.newsCategoryResponse.data!.clusters![index],
+                                key: singleClusterKey(index),
+                                categoryModel:
+                                    state.newsCategoryResponse.data!.clusters![index],
                               ),
                             );
                           },

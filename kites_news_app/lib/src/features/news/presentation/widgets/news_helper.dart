@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kites_news_app/src/core/style/app_colors.dart';
+import 'package:kites_news_app/src/core/utils/constant/key_constants.dart';
 
 class NewsHelper {
   Widget filterChip(
@@ -9,7 +10,7 @@ class NewsHelper {
       child: Semantics(
         label: "Category ${categoryName} double tap to activate",
         child: GestureDetector(
-          key: ValueKey("categoryChips_${index}"),
+          key: categoryChipsKey(index),
           onTap: onTap,
           child: Container(
             padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),

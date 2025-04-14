@@ -1,12 +1,10 @@
 import 'package:flutter/cupertino.dart';
 
 class BaseApiResponse<T> with ChangeNotifier {
-  //! Data members with T as generics
   Status? status;
   String? message;
   T? data;
 
-// ! Contructor
   BaseApiResponse(this.status, this.message, this.data);
 
 // ! Named Constructors with initializer list
@@ -22,4 +20,4 @@ class BaseApiResponse<T> with ChangeNotifier {
   }
 }
 
-enum Status { loading, completed, error ,unAuthorized}
+enum Status { loading, completed, error, unAuthorized }

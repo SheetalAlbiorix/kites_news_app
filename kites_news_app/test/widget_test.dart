@@ -12,6 +12,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:kites_news_app/main.dart';
 import 'package:kites_news_app/src/core/helper/helper.dart';
 import 'package:kites_news_app/src/core/network/dio_network.dart';
+import 'package:kites_news_app/src/core/utils/constant/key_constants.dart';
 import 'package:kites_news_app/src/core/utils/constant/network_constant.dart';
 import 'package:kites_news_app/src/features/news/presentation/notifiers/NewsNotifier.dart';
 import 'package:kites_news_app/src/features/news/presentation/pages/news_page.dart';
@@ -86,7 +87,7 @@ void main() async {
       expect(find.text("Kite News"), findsOneWidget);
 
       final initialTextFinder = find.descendant(
-        of: find.byKey(ValueKey("categoryChips_1")),
+        of: find.byKey(categoryChipsKey(1)),
         matching: find.byType(Text),
       );
       final initialTextWidget = tester.widget<Text>(initialTextFinder);
@@ -100,7 +101,7 @@ void main() async {
       /// cluster widget to be at the first position,
       /// as defined by the API response.
       final initialClusterTitleFinder = find.descendant(
-        of: find.byKey(ValueKey("clusterKey_0")),
+        of: find.byKey(singleClusterKey(0)),
         matching: find.byType(Text),
       );
 
@@ -117,7 +118,7 @@ void main() async {
       /// Scroll to the bottom
       await tester.dragUntilVisible(
           find.text("DOJ to deport alleged MS-13 leader instead of prosecution"),
-          find.byKey(ValueKey("clusterListKey")),
+          find.byKey(clusterListKey),
           Offset(0, -500));
 
       await tester.pumpAndSettle();
@@ -127,7 +128,7 @@ void main() async {
       /// as defined by the API response.
       final lastCluster = newsNotifier!.newsCategoryResponse.data!.clusters!.length - 1;
       final lastClusterTitleFinder = find.descendant(
-        of: find.byKey(ValueKey("clusterKey_${lastCluster}")),
+        of: find.byKey(singleClusterKey(lastCluster)),
         matching: find.byType(Text),
       );
 
@@ -139,7 +140,7 @@ void main() async {
       expect(newsNotifier.newsCategoryResponse.data?.clusters?[lastCluster].title,
           lastClusterTextWidget[1].data);
 
-      await tester.tap(find.byKey(ValueKey("clusterKey_${lastCluster}")));
+      await tester.tap(find.byKey(singleClusterKey(lastCluster)));
 
       await tester.pump(const Duration(milliseconds: 300)); // Navigation transition
       await tester.pump(const Duration(seconds: 1)); // First pass for initial build
@@ -149,8 +150,8 @@ void main() async {
       expect(find.text("DOJ to deport alleged MS-13 leader instead of prosecution"),
           findsOneWidget);
 
-      await tester.dragUntilVisible(find.byKey(ValueKey("articles_label")),
-          find.byKey(ValueKey("news_details_main_list")), Offset(0, -500));
+      await tester.dragUntilVisible(
+          find.byKey(articlesLabelKey), find.byKey(newsDetailsMainList), Offset(0, -500));
       await tester.pumpAndSettle();
 
       /// More Articles widget only shows when there are more more then 10 articles presents
@@ -158,7 +159,7 @@ void main() async {
           newsNotifier.newsCategoryResponse.data?.clusters?[lastCluster].articles?.length,
           lessThan(10));
 
-      expect(find.byKey(ValueKey("more_articles")), findsNothing);
+      expect(find.byKey(moreArticlesKey), findsNothing);
     });
 
     /// Navigates to NewsDetailPage on cluster tap,
@@ -171,7 +172,7 @@ void main() async {
       );
       await tester.pumpAndSettle(Duration(seconds: 5));
 
-      await tester.tap(find.byKey(ValueKey("clusterKey_0")));
+      await tester.tap(find.byKey(singleClusterKey(0)));
 
       await tester.pump(const Duration(milliseconds: 300)); // Navigation transition
       await tester.pump(const Duration(seconds: 1)); // First pass for initial build
@@ -180,8 +181,8 @@ void main() async {
 
       expect(find.text("Trump pauses global tariffs, markets rally"), findsOneWidget);
 
-      await tester.dragUntilVisible(find.byKey(ValueKey("more_articles")),
-          find.byKey(ValueKey("news_details_main_list")), Offset(0, -500));
+      await tester.dragUntilVisible(
+          find.byKey(moreArticlesKey), find.byKey(newsDetailsMainList), Offset(0, -500));
 
       await tester.pumpAndSettle();
       final newsNotifier = navigatorKey.currentContext?.read<NewsNotifier>();
@@ -190,7 +191,7 @@ void main() async {
       expect(newsNotifier?.newsCategoryResponse.data?.clusters?[0].articles?.length,
           greaterThanOrEqualTo(10));
 
-      expect(find.byKey(ValueKey("more_articles")), findsOneWidget);
+      expect(find.byKey(moreArticlesKey), findsOneWidget);
 
       mockFakeImages([
         "https://kagiproxy.com/img/xuK6dj43425cNuAiMIauTVdnqKMOvsvxdCMY3dlO44PT4n3yY4_PjhqkknUAb1qFF0ZuULOnDpvJW5asjxU9PRFWJxL5NHmweXsaEAo",
@@ -201,22 +202,9 @@ void main() async {
         "https://kagiproxy.com/img/-ehRz6dCaGA7bKe7b_vHnrN_LwhvQx_tJH5IqcJKSPsSg5g29kfSRvXLq1qbBmfD8-HMzvsWJGbz6Nvrsh5r3eupbVchF2mEz5gq17Yz-Cg6_aegqhM3ehLLdJZW8Df2TsAfzc18QoA-HMjlG_TL5gFUCcJMlyqtvl-_yZy6wDcf"
       ]);
 
-      await tester.tap(find.byKey(ValueKey("more_articles")));
+      await tester.tap(find.byKey(moreArticlesKey));
       await tester.pumpAndSettle();
 
-      // for (Article article
-      //     in newsNotifier?.newsCategoryResponse.data?.clusters?[0].articles ?? []) {
-      //   final articleFinder = find.byKey(ValueKey(article.title ?? ''));
-      //
-      //   if (articleFinder.evaluate().isEmpty) {
-      //     // Try dragging the list to bring it into view
-      //     await tester.dragUntilVisible(
-      //         articleFinder, find.byKey(ValueKey("all_articles_list")), Offset(0, -20));
-      //     await tester.pumpAndSettle();
-      //   }
-      //
-      //   expect(articleFinder, findsOneWidget, reason: "${article.title} not found");
-      // }
       expect(
           find.text(
               "Fox News Is Having an Incredible Reaction to Trump’s Sudden Tariff Reversal"),

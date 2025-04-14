@@ -7,6 +7,7 @@ import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:kites_news_app/src/core/route/app_route_enum.dart';
 import 'package:kites_news_app/src/core/style/app_colors.dart';
 import 'package:kites_news_app/src/core/translations/l10n.dart';
+import 'package:kites_news_app/src/core/utils/constant/key_constants.dart';
 import 'package:kites_news_app/src/features/news/domain/models/category_response.dart';
 import 'package:kites_news_app/src/features/news/presentation/widgets/news_detail_helper.dart';
 import 'package:kites_news_app/src/shared/presentation/pages/background_page.dart';
@@ -55,7 +56,7 @@ class _NewsDetailPageState extends State<NewsDetailPage> {
         children: [
           Expanded(
             child: SingleChildScrollView(
-              key: ValueKey("news_details_main_list"),
+              key: newsDetailsMainList,
               child: Padding(
                   padding: EdgeInsets.symmetric(
                     horizontal: 16,
@@ -94,7 +95,7 @@ class _NewsDetailPageState extends State<NewsDetailPage> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            key: ValueKey("articles_label"),
+                            key: articlesLabelKey,
                             '${S.of(context).articles}:',
                             style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                                 fontWeight: FontWeight.bold,
@@ -112,7 +113,7 @@ class _NewsDetailPageState extends State<NewsDetailPage> {
                               },
                               child: Text(
                                 S.of(context).more,
-                                key: ValueKey("more_articles"),
+                                key: moreArticlesKey,
                                 style: Theme.of(context).textTheme.bodySmall!.copyWith(
                                     fontWeight: FontWeight.w500,
                                     fontSize: 16,

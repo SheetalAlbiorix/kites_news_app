@@ -5,8 +5,6 @@ import 'package:kites_news_app/src/features/news/presentation/notifiers/article_
 import 'package:kites_news_app/src/features/news/presentation/pages/article_detail_page.dart';
 import 'package:kites_news_app/src/features/news/presentation/pages/news_detail_page.dart';
 import 'package:kites_news_app/src/features/news/presentation/pages/news_page.dart';
-import 'package:kites_news_app/src/shared/presentation/pages/photo_view_page.dart';
-import 'package:kites_news_app/src/shared/presentation/pages/web_view_page.dart';
 import 'package:provider/provider.dart';
 
 class AppRouter {
@@ -20,29 +18,6 @@ class AppRouter {
         return CupertinoPageRoute(
           settings: RouteSettings(name: settings.name),
           builder: (_) => const NewsPage(),
-        );
-
-      // Web view page
-      case '/web_view_page':
-        return CupertinoPageRoute(
-          settings: RouteSettings(name: settings.name),
-          builder: (_) => WebViewPage(
-            link: settings.arguments as String,
-          ),
-        );
-
-      // Photo view page
-      case '/photo_view_page':
-        return CupertinoPageRoute(
-          settings: RouteSettings(name: settings.name),
-          builder: (_) {
-            Map<String, dynamic>? args = settings.arguments as Map<String, dynamic>?;
-            assert(args != null, "You should pass 'path' and 'fromNet'");
-            return PhotoViewPage(
-              path: args!['path'],
-              fromNet: args['fromNet'],
-            );
-          },
         );
 
       case '/news_detail_page':

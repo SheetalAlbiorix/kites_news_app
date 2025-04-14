@@ -8,12 +8,14 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get_it/get_it.dart';
-import 'package:kites_news_app/provider_list.dart';
 import 'package:kites_news_app/src/core/helper/helper.dart';
 import 'package:kites_news_app/src/core/route/router.dart';
 import 'package:kites_news_app/src/core/style/app_theme.dart';
 import 'package:kites_news_app/src/core/translations/l10n.dart';
+import 'package:kites_news_app/src/core/utils/constant/app_constants.dart';
 import 'package:kites_news_app/src/core/utils/injections.dart';
+import 'package:kites_news_app/src/features/news/domain/repositories/abstract_news_repository.dart';
+import 'package:kites_news_app/src/features/news/presentation/notifiers/NewsNotifier.dart';
 import 'package:kites_news_app/src/features/news/presentation/notifiers/category_notifier.dart';
 import 'package:kites_news_app/src/features/splash/splash_screen.dart';
 import 'package:kites_news_app/src/shared/data/data_sources/app_shared_prefs.dart';
@@ -78,7 +80,8 @@ class _AppState extends State<App> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => newsProvider),
+        ChangeNotifierProvider(
+            create: (_) => NewsNotifier(newsRepository: sl<AbstractNewsRepository>())),
         ChangeNotifierProvider(create: (_) => CategoryNotifier()),
       ],
       child: ChangeNotifierProvider<AppNotifier>.value(
@@ -92,7 +95,7 @@ class _AppState extends State<App> with WidgetsBindingObserver {
               splitScreenMode: true,
               builder: (context, child) {
                 return MaterialApp(
-                  title: 'Kite News',
+                  title: appName,
                   scaffoldMessengerKey: snackBarKey,
                   onGenerateRoute: AppRouter.generateRoute,
                   theme: value._isDarkMode ? darkAppTheme : appTheme,
@@ -109,7 +112,8 @@ class _AppState extends State<App> with WidgetsBindingObserver {
                           AnimatedContainer(
                             duration: Duration(milliseconds: 500),
                             curve: Curves.easeInOut,
-                            height: value.isConnected ? 0 : 50, // Animate height
+                            height: value.isConnected ? 0 : 50,
+                            // Animate height
                             color: Theme.of(context).colorScheme.errorContainer,
                             child: value.isConnected
                                 ? SizedBox.shrink()
@@ -182,7 +186,8 @@ class AppNotifier extends ChangeNotifier {
 
   void updateConnectivityStatus(List<ConnectivityResult> results) {
     bool newConnectionStatus = results.contains(ConnectivityResult.wifi) ||
-        results.contains(ConnectivityResult.mobile) || results.contains(ConnectivityResult.ethernet);
+        results.contains(ConnectivityResult.mobile) ||
+        results.contains(ConnectivityResult.ethernet);
     if (newConnectionStatus != isConnected) {
       isConnected = newConnectionStatus;
       notifyListeners();
