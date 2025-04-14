@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:kites_news_app/src/core/style/app_colors.dart';
 import 'package:kites_news_app/src/core/translations/l10n.dart';
+import 'package:kites_news_app/src/core/utils/constant/key_constants.dart';
 import 'package:kites_news_app/src/features/news/domain/models/category_response.dart';
 import 'package:kites_news_app/src/features/news/presentation/notifiers/article_pagination_notifier.dart';
 import 'package:kites_news_app/src/features/news/presentation/widgets/news_detail_helper.dart';
@@ -75,7 +76,7 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
 
     return AnimationLimiter(
       child: ListView.builder(
-        key: ValueKey("all_articles_list"),
+        key: allArticlesList,
         controller: _scrollController,
         itemCount: provider.visibleArticles.length + (provider.isLoadingMore ? 1 : 0),
         itemBuilder: (context, index) {

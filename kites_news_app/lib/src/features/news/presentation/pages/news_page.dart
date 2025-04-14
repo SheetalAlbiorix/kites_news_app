@@ -68,7 +68,7 @@ class _NewsPageState extends State<NewsPage> with TickerProviderStateMixin {
 
     return BackgroundPage(
       scaffoldKey: _key,
-      withDrawer: true,
+      withDrawer: false,
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         title: Text(

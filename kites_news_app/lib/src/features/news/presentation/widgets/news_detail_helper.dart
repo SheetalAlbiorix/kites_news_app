@@ -12,17 +12,19 @@ class NewsDetailHelper {
     final date = DateTime.tryParse(articleList?.date.toString() ?? '');
     final formattedDate = date != null ? DateFormat('yMMMd').format(date) : '';
 
-    return Card(
-      key: ValueKey(articleList?.title ?? ''),
-      margin: const EdgeInsets.symmetric(vertical: 8),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: GestureDetector(
-        onTap: () async {
-          await HapticFeedback.lightImpact();
+    return GestureDetector(
+      onTap: () async {
+        if (WidgetsBinding.instance.lifecycleState == AppLifecycleState.resumed) {
+          HapticFeedback.lightImpact();
           _launchUrl(url: articleList?.link);
-        },
+        }
+      },
+      child: Card(
+        key: ValueKey(articleList?.title ?? ''),
+        margin: const EdgeInsets.symmetric(vertical: 8),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
         child: Padding(
           padding: const EdgeInsets.all(12),
           child: Column(

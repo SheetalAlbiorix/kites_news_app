@@ -25,27 +25,35 @@ class NewsDetailPage extends StatefulWidget {
 
 class _NewsDetailPageState extends State<NewsDetailPage> {
   String? imageUrl;
-
   final NewsDetailHelper newsDetailHelper = NewsDetailHelper();
 
   @override
   Widget build(BuildContext context) {
     imageUrl = widget.clusterModel.articles
-            ?.firstWhere(
-              (article) => article.image?.isNotEmpty == true,
-              orElse: () => widget.clusterModel.articles!.first,
-            )
-            .image ??
+        ?.firstWhere(
+          (article) => article.image?.isNotEmpty == true,
+      orElse: () => widget.clusterModel.articles!.first,
+    )
+        .image ??
         widget.clusterModel.articles?.first.image;
 
     return BackgroundPage(
       withDrawer: true,
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      backgroundColor: Theme
+          .of(context)
+          .scaffoldBackgroundColor,
       appBar: AppBar(
         title: Text(
           "${widget.clusterModel.category}",
-          style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-              color: Theme.of(context).colorScheme.onPrimary,
+          style: Theme
+              .of(context)
+              .textTheme
+              .bodyLarge!
+              .copyWith(
+              color: Theme
+                  .of(context)
+                  .colorScheme
+                  .onPrimary,
               fontWeight: FontWeight.bold),
         ),
         scrolledUnderElevation: 0,
@@ -70,17 +78,31 @@ class _NewsDetailPageState extends State<NewsDetailPage> {
                       ),
                       Text(
                         '${widget.clusterModel.title}',
-                        style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                              color: Theme.of(context).colorScheme.onPrimary,
-                              fontStyle: FontStyle.italic,
-                              fontWeight: FontWeight.bold,
-                            ),
+                        style: Theme
+                            .of(context)
+                            .textTheme
+                            .bodyLarge!
+                            .copyWith(
+                          color: Theme
+                              .of(context)
+                              .colorScheme
+                              .onPrimary,
+                          fontStyle: FontStyle.italic,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                       Text(
                         '${widget.clusterModel.shortSummary}',
-                        style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                              color: Theme.of(context).colorScheme.onSecondary,
-                            ),
+                        style: Theme
+                            .of(context)
+                            .textTheme
+                            .bodyLarge!
+                            .copyWith(
+                          color: Theme
+                              .of(context)
+                              .colorScheme
+                              .onSecondary,
+                        ),
                       ),
                       CachedImageWidget(
                         imageUrl: imageUrl,
@@ -96,10 +118,19 @@ class _NewsDetailPageState extends State<NewsDetailPage> {
                         children: [
                           Text(
                             key: articlesLabelKey,
-                            '${S.of(context).articles}:',
-                            style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                            '${S
+                                .of(context)
+                                .articles}:',
+                            style: Theme
+                                .of(context)
+                                .textTheme
+                                .bodyLarge!
+                                .copyWith(
                                 fontWeight: FontWeight.bold,
-                                color: Theme.of(context).colorScheme.onPrimary),
+                                color: Theme
+                                    .of(context)
+                                    .colorScheme
+                                    .onPrimary),
                           ),
                           if ((widget.clusterModel.articles?.length ?? 0) > 10)
                             GestureDetector(
@@ -112,12 +143,21 @@ class _NewsDetailPageState extends State<NewsDetailPage> {
                                 );
                               },
                               child: Text(
-                                S.of(context).more,
+                                S
+                                    .of(context)
+                                    .more,
                                 key: moreArticlesKey,
-                                style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                                style: Theme
+                                    .of(context)
+                                    .textTheme
+                                    .bodySmall!
+                                    .copyWith(
                                     fontWeight: FontWeight.w500,
                                     fontSize: 16,
-                                    color: Theme.of(context).colorScheme.onPrimary,
+                                    color: Theme
+                                        .of(context)
+                                        .colorScheme
+                                        .onPrimary,
                                     decorationStyle: TextDecorationStyle.dashed,
                                     decorationColor: AppColors.black),
                               ),

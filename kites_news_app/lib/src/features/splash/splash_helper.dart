@@ -57,7 +57,7 @@ class SplashHelper {
                           moveToTop.value = true;
                           Future.delayed(const Duration(milliseconds: 1000),
                                   () async {
-                                    Navigator.pushNamed(
+                                    Navigator.pushReplacementNamed(
                                       context,
                                       AppRouteEnum.newsPage.name,
                                     );
