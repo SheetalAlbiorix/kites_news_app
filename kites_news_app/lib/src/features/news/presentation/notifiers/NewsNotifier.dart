@@ -36,6 +36,7 @@ class NewsNotifier extends BaseNotifier implements NewsProvEvent {
     }
   }
 
+
   Future<void> getCategoryResponse({String? selectedCategory}) async {
     try {
       apiResIsLoading(newsCategoryResponse);

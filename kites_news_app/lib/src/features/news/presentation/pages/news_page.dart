@@ -189,8 +189,9 @@ class _NewsPageState extends State<NewsPage> with TickerProviderStateMixin {
                             );
                           },
                         ),
-                      if ((state.newsCategoryResponse.data?.clusters ?? []).isEmpty &&
-                          state.newsCategoryResponse.status == Status.completed)
+                      if (((state.newsCategoryResponse.data?.clusters ?? []).isEmpty &&
+                          state.newsCategoryResponse.status == Status.completed) ||(
+                          state.newsCategoryResponse.status == Status.error) )
                         SizedBox(
                             height:MediaQuery.of(context).size.height*0.70,
                             child: Center(child: ReloadWidget.empty(content: S.of(context).no_data))),
@@ -215,17 +216,22 @@ class _NewsPageState extends State<NewsPage> with TickerProviderStateMixin {
       final categoryNotifier = Provider.of<CategoryNotifier>(context, listen: false);
       categoryNotifier.setSelectedCategory(worldCategory);
       callArticles();
-    } else {}
+    } else{
+      newsNotifier.newsCategoryResponse.status = Status.error;
+    }
   }
 
   Future<void> callArticles({bool withLoading = true}) async {
     final categoryNotifier = Provider.of<CategoryNotifier>(context, listen: false);
     final selectedCategory = categoryNotifier.getSelectedCategory;
+    newsNotifier.newsCategoryResponse.data?.clusters!.clear();
     if (selectedCategory != null) {
       await newsNotifier.getCategoryResponse(selectedCategory: selectedCategory.file);
       if (newsNotifier.newsCategoryResponse.data?.clusters != null) {
         _resetAnimations(newsNotifier.newsCategoryResponse.data!.clusters!.length);
       }
+    }else{
+      _fetchCategories();
     }
   }
 
