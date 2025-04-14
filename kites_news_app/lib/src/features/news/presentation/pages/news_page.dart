@@ -137,61 +137,52 @@ class _NewsPageState extends State<NewsPage> with TickerProviderStateMixin {
                 if (state.newsCategoryResponse.status == Status.loading) {
                   return Center(child: AppLoader());
                 }
-
                 return SmartRefresher(
                   enablePullDown: true,
                   enablePullUp: false,
-                  header: WaterDropHeader(waterDropColor: Theme.of(context).cardColor),
+                  header: WaterDropHeader(
+                    waterDropColor: Theme.of(context).cardColor),
                   controller: _refreshController,
                   onRefresh: _onRefresh,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  child: ListView(
                     children: [
                       if (state.newsCategoryResponse.data?.clusters?.isNotEmpty ?? false)
-                        Expanded(
-                          child: ListView.builder(
-                            key: ValueKey("clusterListKey"),
-                            itemCount: state.newsCategoryResponse.data?.clusters?.length,
-                            itemBuilder: (context, index) {
-                              if (!animationControllers.containsKey(index)) {
-                                animationControllers[index] = AnimationController(
-                                  duration: Duration(milliseconds: 500 + (index * 50)),
-                                  vsync: this,
-                                );
-                              }
-
-                              final Animation<Offset> listItemAnimation = Tween<Offset>(
-                                begin: Offset(1, 0),
-                                end: Offset.zero,
-                              ).animate(CurvedAnimation(
-                                parent: animationControllers[index]!,
-                                curve: Curves.easeOut,
-                              ));
-
-                              WidgetsBinding.instance.addPostFrameCallback((_) {
-                                if (animationControllers[index]!.status !=
-                                    AnimationStatus.completed) {
-                                  animationControllers[index]!.forward();
-                                }
-                              });
-
-                              return SlideTransition(
-                                position: listItemAnimation,
-                                child: NewsCardWidget(
-                                  key: ValueKey("clusterKey_${index}"),
-                                  categoryModel:
-                                      state.newsCategoryResponse.data!.clusters![index],
-                                ),
+                        ...List.generate(
+                          state.newsCategoryResponse.data!.clusters!.length,
+                              (index) {
+                            if (!animationControllers.containsKey(index)) {
+                              animationControllers[index] = AnimationController(
+                                duration: Duration(milliseconds: 500 + (index * 50)),
+                                vsync: this,
                               );
-                            },
-                          ),
+                            }
+                            final Animation<Offset> listItemAnimation = Tween<Offset>(
+                              begin: Offset(1, 0),
+                              end: Offset.zero,
+                            ).animate(CurvedAnimation(
+                              parent: animationControllers[index]!,
+                              curve: Curves.easeOut,
+                            ));
+
+                            WidgetsBinding.instance.addPostFrameCallback((_) {
+                              if (animationControllers[index]!.status != AnimationStatus.completed) {
+                                animationControllers[index]!.forward();
+                              }
+                            });
+
+                            return SlideTransition(
+                              position: listItemAnimation,
+                              child: NewsCardWidget(
+                                key: ValueKey("clusterKey_${index}"),
+                                categoryModel: state.newsCategoryResponse.data!.clusters![index],
+                              ),
+                            );
+                          },
                         ),
                       if ((state.newsCategoryResponse.data?.clusters ?? []).isEmpty &&
                           state.newsCategoryResponse.status == Status.completed)
-                        Expanded(
-                          child: Center(
-                            child: ReloadWidget.empty(content: S.of(context).no_data),
-                          ),
+                        Center(
+                          child: ReloadWidget.empty(content: S.of(context).no_data),
                         ),
                     ],
                   ),

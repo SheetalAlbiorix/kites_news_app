@@ -182,7 +182,7 @@ class AppNotifier extends ChangeNotifier {
 
   void updateConnectivityStatus(List<ConnectivityResult> results) {
     bool newConnectionStatus = results.contains(ConnectivityResult.wifi) ||
-        results.contains(ConnectivityResult.mobile);
+        results.contains(ConnectivityResult.mobile) || results.contains(ConnectivityResult.ethernet);
     if (newConnectionStatus != isConnected) {
       isConnected = newConnectionStatus;
       notifyListeners();
