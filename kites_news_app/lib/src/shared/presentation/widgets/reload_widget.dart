@@ -45,7 +45,7 @@ class ReloadWidget extends StatelessWidget {
           Text(
             content,
             style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                  color: AppColors.lightGray,
+                  color: Theme.of(context).colorScheme.onPrimary,
                   fontWeight: FontWeight.bold,
                 ),
             textAlign: TextAlign.center,

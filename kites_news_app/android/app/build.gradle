@@ -7,8 +7,14 @@ plugins {
 
 android {
     namespace = "com.kites_news_app.kites_news_app"
+    ndkVersion = "27.0.12077973"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
+
+    lint {
+        baseline = file("lint-baseline.xml")
+    }
+
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8

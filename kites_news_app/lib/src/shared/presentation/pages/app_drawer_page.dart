@@ -5,7 +5,6 @@ import 'package:provider/provider.dart';
 import '../../../../main.dart';
 import '../../../core/helper/helper.dart';
 import '../../../core/translations/l10n.dart';
-import '../../../core/utils/injections.dart';
 import '../../data/data_sources/app_shared_prefs.dart';
 import '../../domain/entities/language_enum.dart';
 
@@ -118,8 +117,7 @@ class _AppDrawerPageState extends State<AppDrawerPage> {
                     // Light
                     sl<AppSharedPrefs>().setDarkTheme(false);
                   }
-                  Provider.of<AppNotifier>(context, listen: false)
-                      .updateThemeTitle(sl<AppSharedPrefs>().getIsDarkTheme());
+                  context.read<AppNotifier>().toggleTheme();
                 },
               ),
             ],

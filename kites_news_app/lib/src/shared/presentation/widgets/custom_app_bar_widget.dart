@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../core/helper/helper.dart';
-import '../../../core/style/app_colors.dart';
 
 class CustomAppBarWidget extends StatelessWidget {
   final double? height;
@@ -26,14 +25,15 @@ class CustomAppBarWidget extends StatelessWidget {
       height: height ?? 60.h,
       padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 0.h),
       decoration: BoxDecoration(
-          color: backgroundColor ?? Theme.of(context).scaffoldBackgroundColor,
-          boxShadow: [
+        color: backgroundColor ?? Theme.of(context).scaffoldBackgroundColor,
+        /*        boxShadow: [
             BoxShadow(
-                color: AppColors().darkGray.withValues(alpha: 0.1),
+                // color: AppColors().darkGray.withValues(alpha: 0.1),
                 spreadRadius: 0,
-                blurRadius: 4,
+                blurRadius: 0,
                 offset: Offset(0, 4))
-          ]),
+          ],*/
+      ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,

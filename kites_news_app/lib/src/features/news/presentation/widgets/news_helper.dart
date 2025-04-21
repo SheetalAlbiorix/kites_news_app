@@ -1,48 +1,45 @@
-
 import 'package:flutter/material.dart';
+import 'package:kites_news_app/src/core/style/app_colors.dart';
+import 'package:kites_news_app/src/core/utils/constant/key_constants.dart';
 
-class NewsHelper{
-
-  Widget filterChip({VoidCallback? onTap,bool? isSelected,String? categoryName}){
-    return   Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 4),
-      child: GestureDetector(
-        onTap: onTap,
-        child: Container(
-          decoration: BoxDecoration(
-            gradient: isSelected ?? false
-                ? LinearGradient(
-              colors: [
-                Colors.black.withValues(alpha: 0.8),
-                Colors.black.withValues(alpha: 0.5)
-              ], // Light gradient
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            )
-                : null,
-            color: isSelected == true
-                ? Colors.white
-                : Colors.grey.shade200,
-            borderRadius: BorderRadius.circular(20),
-          ),
-          padding: const EdgeInsets.symmetric(
-              horizontal: 12, vertical: 8),
-          child: Center(
+class NewsHelper {
+  Widget filterChip(
+      {VoidCallback? onTap, bool? isSelected, String? categoryName, required int index}) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 8),
+      child: Semantics(
+        label: "Category ${categoryName} double tap to activate",
+        child: GestureDetector(
+          key: categoryChipsKey(index),
+          onTap: onTap,
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            decoration: BoxDecoration(
+              color: isSelected ?? false
+                  ? AppColors().chipSelectedBGColor
+                  : AppColors().chipBGColor,
+              borderRadius: BorderRadius.circular(20),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.1),
+                  blurRadius: 2,
+                  offset: Offset(0, 1),
+                ),
+              ],
+            ),
             child: Text(
-              categoryName ?? '',
+              categoryName ?? "",
               style: TextStyle(
-                color: isSelected == true
-                    ? Colors.white
-                    : Colors.black87,
-                // Text color changes on selection
-                fontWeight: FontWeight.w500,
+                color: isSelected ?? false
+                    ? AppColors().chipSelectedTextColor
+                    : AppColors().chipTextColor,
                 fontSize: 14,
+                fontWeight: FontWeight.bold,
               ),
             ),
           ),
         ),
       ),
-    );;
+    );
   }
-
 }

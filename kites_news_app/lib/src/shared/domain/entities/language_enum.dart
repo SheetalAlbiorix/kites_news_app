@@ -1,10 +1,10 @@
-
 import '../../../../main.dart';
 import '../../../core/translations/l10n.dart';
 
 enum LanguageEnum {
   ar, // Arabic
   en, // English
+  sp, // Spanish
 }
 
 extension LanguageEnumExtension on LanguageEnum {
@@ -15,9 +15,8 @@ extension LanguageEnumExtension on LanguageEnum {
 
       case LanguageEnum.en:
         return "en";
-
-      default:
-        return "1";
+      case LanguageEnum.sp:
+        return "sp";
     }
   }
 
@@ -28,9 +27,8 @@ extension LanguageEnumExtension on LanguageEnum {
 
       case LanguageEnum.en:
         return "en_US";
-
-      default:
-        return "en_US";
+      case LanguageEnum.sp:
+        return "es_ES";
     }
   }
 
@@ -41,9 +39,8 @@ extension LanguageEnumExtension on LanguageEnum {
 
       case LanguageEnum.en:
         return S.of(navigatorKey.currentContext!).english;
-
-      default:
-        return S.of(navigatorKey.currentContext!).english;
+      case LanguageEnum.sp:
+        return S.of(navigatorKey.currentContext!).spanish;
     }
   }
 }

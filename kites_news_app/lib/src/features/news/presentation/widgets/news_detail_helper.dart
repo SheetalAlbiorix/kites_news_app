@@ -1,74 +1,91 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:kites_news_app/src/features/news/domain/models/category_response.dart';
-import 'package:kites_news_app/src/shared/presentation/widgets/cached_image_widget.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../../shared/presentation/widgets/cached_image_widget.dart';
+
 class NewsDetailHelper {
-  Widget articlesList({Article? articleList,String? sourceImage}) {
+  Widget articlesList(
+      {Article? articleList, required BuildContext context, String? sourceImage}) {
     final date = DateTime.tryParse(articleList?.date.toString() ?? '');
     final formattedDate = date != null ? DateFormat('yMMMd').format(date) : '';
 
-    return Card(
-      margin: const EdgeInsets.symmetric(vertical: 8),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(12),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  child: Text(
-                    articleList?.title ?? '',
-                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+    return GestureDetector(
+      onTap: () async {
+        if (WidgetsBinding.instance.lifecycleState == AppLifecycleState.resumed) {
+          HapticFeedback.lightImpact();
+          _launchUrl(url: articleList?.link);
+        }
+      },
+      child: Card(
+        key: ValueKey(articleList?.title ?? ''),
+        margin: const EdgeInsets.symmetric(vertical: 8),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(12),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: Text(
+                      articleList?.title ?? '',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).colorScheme.onPrimary,
+                      ),
+                    ),
                   ),
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-                CachedImageWidget(
-                  imageUrl: articleList?.image,
-                  height: 60,
-                  width: 80,
-                  radius: 12,
-                ),
-              ],
-            ),
-            const SizedBox(height: 5),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              spacing: 10,
-              children: [
-                CachedImageWidget(
-                  imageUrl: sourceImage,
-                  width: 15,
-                  height: 15,
-                ),
-                GestureDetector(
-                  onTap: () async {
-                    _launchUrl(url: articleList?.link);
-                  },
-                  child: Text(
+                  SizedBox(
+                    width: 10,
+                  ),
+                  CachedImageWidget(
+                    imageUrl: articleList?.image,
+                    height: 60,
+                    width: 80,
+                    radius: 12,
+                  ),
+                ],
+              ),
+              const SizedBox(height: 5),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                spacing: 10,
+                children: [
+                  CachedImageWidget(
+                    imageUrl: sourceImage,
+                    width: 15,
+                    height: 15,
+                  ),
+                  Text(
                     '${articleList?.domain}',
-                    style: const TextStyle(fontSize: 12, color: Colors.grey),
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Theme.of(context).colorScheme.onSecondary,
+                    ),
                   ),
-                ),
-                const Spacer(), // Pushes the date to the end
-                Text(
-                  '$formattedDate',
-                  style: const TextStyle(fontSize: 10, color: Colors.grey),
-                )
-              ],
-            ),
-            const SizedBox(height: 5),
-          ],
+                  const Spacer(), // Pushes the date to the end
+                  Text(
+                    '$formattedDate',
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Theme.of(context).colorScheme.onSecondary,
+                    ),
+                  )
+                ],
+              ),
+              const SizedBox(height: 5),
+            ],
+          ),
         ),
       ),
     );
@@ -87,11 +104,9 @@ class NewsDetailHelper {
 
   String? getFaviconForDomain(String domain, List<Domain> domains) {
     final matched = domains.firstWhere(
-          (d) => d.name == domain,
+      (d) => d.name == domain,
       orElse: () => Domain(name: '', favicon: ''),
     );
     return matched.name!.isNotEmpty ? matched.favicon : null;
   }
-
-
 }

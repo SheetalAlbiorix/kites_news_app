@@ -18,29 +18,9 @@ void initRootLogger() {
     if (!kDebugMode) {
       return;
     }
-
-    var start = '\x1b[90m';
-    const end = '\x1b[0m';
-    // const white = '\x1b[37m';
-
-    switch (record.level.name) {
-      case 'INFO':
-        start = '\x1b[92m';
-        break;
-      case 'WARNING':
-        start = '\x1b[93m';
-        break;
-      case 'SEVERE':
-        start = '\x1b[103m\x1b[31m';
-        break;
-      case 'SHOUT':
-        start = '\x1b[41m\x1b[93m';
-        break;
-    }
-
-    final message = '$end$start${record.message}$end';
+    /// Can Modify the log message from here.
     developer.log(
-      message,
+      record.message,
       // name: record.loggerName.padRight(25),
       level: record.level.value,
     );

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:kites_news_app/src/core/style/app_colors.dart';
+import 'package:lottie/lottie.dart';
 
 class AppLoader extends StatelessWidget {
   final Color? iconColor;
@@ -14,14 +15,13 @@ class AppLoader extends StatelessWidget {
     return Center(
       child: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: SpinKitFadingCircle(
-            itemBuilder: (BuildContext context, int index) {
-              return DecoratedBox(
-                decoration: BoxDecoration(
-                    color: iconColor ?? Theme.of(context).iconTheme.color,
-                    borderRadius: BorderRadius.circular(25)),
-              );
-            },
+          child: Center(
+            child: Lottie.asset(
+              AppColors().loadingAnimationData,
+              width: 200,
+              height: 200,
+              fit: BoxFit.contain,
+            ),
           )),
     );
   }

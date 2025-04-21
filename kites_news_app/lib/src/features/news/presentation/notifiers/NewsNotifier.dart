@@ -1,5 +1,7 @@
+import 'dart:async';
+
+import 'package:kites_news_app/src/core/helper/base_notifier.dart';
 import 'package:kites_news_app/src/core/network/response.dart';
-import 'package:kites_news_app/src/features/articles/presentation/notifiers/base_notifier.dart';
 import 'package:kites_news_app/src/features/news/domain/models/category_response.dart';
 import 'package:kites_news_app/src/features/news/domain/models/list_of_category_model.dart';
 import 'package:kites_news_app/src/features/news/domain/repositories/abstract_news_repository.dart';
@@ -19,21 +21,21 @@ class NewsNotifier extends BaseNotifier implements NewsProvEvent {
       final result = await newsRepository.getListOfCategory();
 
       return result.fold(
-            (failure) {
+        (failure) {
           apiResIsFailed(newsResponse, failure);
-          return null;  // Return null in case of failure
+          return null; // Return null in case of failure
         },
-            (data) {
+        (data) {
           apiResIsSuccess(newsResponse, data);
-          return data;  // Return the fetched data
+          return data; // Return the fetched data
         },
       );
     } catch (e) {
       apiResIsFailed(newsResponse, e);
       return null;
     }
-
   }
+
 
   Future<void> getCategoryResponse({String? selectedCategory}) async {
     try {
