@@ -2,7 +2,7 @@
 
 [![Watch the video]]
 
-https://github.com/user-attachments/assets/43999284-a3ca-48c1-b642-7a67ea0909d6
+Past your video here (https://github.com/user-attachments/assets/43999284-a3ca-48c1-b642-7a67ea0909d6)
 
 # �� Kites News App
 
@@ -94,7 +94,7 @@ flutter pub get
 
 ### ScreenShots for the Kite News App ### 
 # dark mode 
-<div align="center">
+<div align="left">
     <img src="screenshots/dark/1000014460.jpg" width="150px"</img>
     <img src="screenshots/dark/1000014462.jpg" width="150px"</img>
     <img src="screenshots/dark/1000014464.jpg" width="150px"</img>
@@ -103,7 +103,7 @@ flutter pub get
 </div>
 
 # light mode
-<div align="center">
+<div align="left">
     <img src="screenshots/light/1000014461.jpg" width="150px"</img>
     <img src="screenshots/light/1000014463.jpg" width="150px"</img>
     <img src="screenshots/light/1000014465.jpg" width="150px"</img>
@@ -111,7 +111,7 @@ flutter pub get
 </div>
 
 # localization
-<div align="center">
+<div align="left">
     <img src="screenshots/localization/Screenshot_20250414-191105.jpg" width="150px"</img>
     <img src="screenshots/localization/Screenshot_20250414-191109.jpg" width="150px"</img>
     <img src="screenshots/localization/Screenshot_20250414-191113.jpg" width="150px"</img>
